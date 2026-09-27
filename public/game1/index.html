@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tái Chế Đồ Cũ Thành Đồ Dùng Học Tập</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<style>
+:root{
+  --ink:#2d2a4a;
+  --panel:#ffffff;
+  --sky1:#bdeaff;
+  --sky2:#eaf9ff;
+  --accent:#ff7ab8;
+  --accent2:#4fd1c5;
+  --gold:#ffc93c;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;overflow-x:hidden;}
+body{
+  font-family:'Baloo 2','Quicksand',sans-serif;
+  background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 55%,#dff7e6 100%);
+  color:var(--ink);
+  min-height:100vh;
+  user-select:none;
+}
+.font-round{font-family:'Baloo 2','Quicksand',sans-serif;}
+.cartoon-panel{
+  background:var(--panel);
+  border:5px solid var(--ink);
+  border-radius:28px;
+  box-shadow:0 8px 0 rgba(45,42,74,0.18);
+}
+.btn-cartoon{
+  border:4px solid var(--ink);
+  border-radius:20px;
+  font-weight:700;
+  box-shadow:0 6px 0 rgba(45,42,74,0.35);
+  transition:transform .08s ease, box-shadow .08s ease;
+  cursor:pointer;
+  font-family:'Baloo 2',sans-serif;
+}
+.btn-cartoon:active{transform:translateY(5px);box-shadow:0 1px 0 rgba(45,42,74,0.35);}
+.btn-cartoon:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:0 6px 0 rgba(45,42,74,0.35);}
+.tab-group{transition:transform .15s ease;}
+.tab-group.active{transform:translateY(-6px) scale(1.06);}
+.tab-group:active{transform:scale(0.95);}
+@keyframes bounceIn{0%{transform:scale(0.3) translateY(40px);opacity:0;}60%{transform:scale(1.08) translateY(-6px);opacity:1;}100%{transform:scale(1) translateY(0);}}
+.anim-bounceIn{animation:bounceIn .5s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes wiggle{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+.anim-wiggle{animation:wiggle 1.8s ease-in-out infinite;}
+@keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.anim-float{animation:floatY 2.4s ease-in-out infinite;}
+@keyframes popScale{0%{transform:scale(0);opacity:0;}70%{transform:scale(1.25);opacity:1;}100%{transform:scale(1);}}
+.anim-pop{animation:popScale .35s cubic-bezier(.34,1.56,.64,1) both;}
+@keyframes sparkleSpin{0%{transform:rotate(0deg) scale(0.6);opacity:0;}30%{opacity:1;}100%{transform:rotate(180deg) scale(1.1);opacity:0;}}
+@keyframes blinkEye{0%,88%,100%{transform:scaleY(1);}92%{transform:scaleY(0.1);}96%{transform:scaleY(1);}}
+.eye-blink{animation:blinkEye 4s ease-in-out infinite;transform-origin:center;}
+@keyframes tickFlash{0%,100%{color:#ef4444;}50%{color:#7f1d1d;}}
+.timer-danger{animation:tickFlash 1s steps(1) infinite;}
+@keyframes glueSweep{0%{transform:translateX(-120%) rotate(-8deg);opacity:0;}20%{opacity:1;}100%{transform:translateX(120%) rotate(-8deg);opacity:0;}}
+.glue-sweep{animation:glueSweep .7s ease-out both;}
+@keyframes fallShrink{from{opacity:1;}to{opacity:0;transform:scale(0.3);}}
+.balloon-body{border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;position:relative;}
+.balloon-body::after{content:'';position:absolute;left:50%;bottom:-9px;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid inherit;transform:translateX(-50%);}
+.balloon{position:absolute;cursor:pointer;touch-action:manipulation;will-change:transform;}
+.falling-item{position:absolute;z-index:40;transition:left .55s cubic-bezier(.55,0,.85,.55), top .55s cubic-bezier(.55,0,.85,.55), transform .55s ease;pointer-events:none;}
+.modal-overlay{position:fixed;inset:0;background:rgba(45,42,74,0.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px;}
+.speech-bubble{position:relative;}
+.speech-bubble:after{content:'';position:absolute;left:26px;bottom:-14px;border-width:14px 14px 0 0;border-style:solid;border-color:#fff transparent transparent transparent;filter:drop-shadow(0 2px 0 var(--ink));}
+.mute-off{filter:grayscale(1) opacity(.5);}
+.step-dot{width:44px;height:44px;border-radius:50%;border:4px solid var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;background:#fff;cursor:pointer;}
+.step-dot.current{background:var(--gold);transform:scale(1.15);}
+.step-dot.done{background:#86efac;}
+.material-card,.color-swatch,.sticker-card{cursor:pointer;touch-action:manipulation;}
+.material-card:active,.color-swatch:active,.sticker-card:active{transform:scale(0.92);}
+.slot-empty{border:4px dashed #9ca3af;border-radius:16px;background:rgba(255,255,255,.5);}
+.tube-select-ring{outline:5px dashed var(--accent);outline-offset:4px;border-radius:16px;}
+.scrollbar-thin::-webkit-scrollbar{height:8px;width:8px;}
+.scrollbar-thin::-webkit-scrollbar-thumb{background:#c7d2fe;border-radius:8px;}
+#startOverlay{position:fixed;inset:0;z-index:200;background:linear-gradient(180deg,#bdeaff,#fff3c4);display:flex;align-items:center;justify-content:center;}
+.hidden-panel{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- START OVERLAY (needed to unlock audio + speech per browser autoplay rules) -->
+<div id="startOverlay">
+  <div class="cartoon-panel p-8 md:p-12 text-center max-w-md mx-4 anim-bounceIn">
+    <div class="text-6xl mb-2">♻️🎨</div>
+    <h1 class="text-2xl md:text-3xl font-extrabold mb-2">Tái Chế Đồ Cũ<br>Thành Đồ Dùng Học Tập</h1>
+    <p class="text-base md:text-lg mb-6">Cùng bạn Biu biến đồ cũ thành lọ bút xinh xắn nhé!</p>
+    <button id="btnStartApp" class="btn-cartoon bg-yellow-300 text-xl px-8 py-4">▶️ Bắt Đầu Học Nhé!</button>
+  </div>
+</div>
+
+<div id="app" class="hidden-panel min-h-screen pb-40">
+
+  <!-- HEADER -->
+  <header class="cartoon-panel m-2 md:m-3 p-2 md:p-3 flex flex-wrap items-center gap-2 md:gap-3 sticky top-2 z-30 bg-white">
+    <div class="flex gap-1 md:gap-2" id="groupTabs"></div>
+
+    <div class="flex-1"></div>
+
+    <div class="flex items-center gap-2 cartoon-panel px-3 py-1 border-2" id="timerBox">
+      <span id="timerDisplay" class="text-2xl font-extrabold tabular-nums">05:00</span>
+      <button id="btnTimerStart" class="btn-cartoon bg-green-300 text-sm px-2 py-1">▶️</button>
+      <button id="btnTimerPause" class="btn-cartoon bg-orange-300 text-sm px-2 py-1">⏸️</button>
+      <button id="btnTimerReset" class="btn-cartoon bg-gray-200 text-sm px-2 py-1">🔄</button>
+    </div>
+
+    <button id="btnExhibition" class="btn-cartoon bg-purple-300 text-sm md:text-base px-3 py-2">🏆 Triển Lãm 4 Tổ</button>
+    <button id="btnMute" class="btn-cartoon bg-sky-200 text-sm md:text-base px-3 py-2">🔊</button>
+  </header>
+
+  <!-- STEP INDICATOR -->
+  <div class="flex items-center justify-center gap-3 md:gap-6 my-2" id="stepIndicator"></div>
+
+  <!-- MAIN CONTENT -->
+  <main class="px-2 md:px-4 max-w-6xl mx-auto">
+
+    <!-- STEP 1 -->
+    <section id="step1Panel" class="cartoon-panel p-3 md:p-5">
+      <h2 class="text-xl md:text-2xl font-extrabold text-center mb-3">🧵 Bước 1: Ghép Đồ Cũ Lên Bìa Cứng</h2>
+      <div class="flex flex-col md:flex-row gap-4">
+        <div class="w-full md:w-56 shrink-0">
+          <div class="font-bold text-lg mb-2">🗑️ Kho Vật Liệu</div>
+          <div id="materialList" class="flex md:flex-col gap-2 overflow-x-auto scrollbar-thin"></div>
+        </div>
+        <div class="flex-1 flex flex-col items-center">
+          <div class="flex gap-2 mb-3 flex-wrap justify-center" id="cardboardColorPicker"></div>
+          <div id="cardboardBoard" class="relative rounded-2xl border-4 border-dashed p-4" style="width:min(92vw,420px);aspect-ratio:16/20;"></div>
+          <div class="mt-3 font-bold text-lg" id="slotCountText"></div>
+        </div>
+      </div>
+      <div class="flex justify-end mt-3">
+        <button id="btnToStep2" class="btn-cartoon bg-teal-300 text-lg px-6 py-3">Sang Bước 2 ▶️</button>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="step2Panel" class="cartoon-panel p-3 md:p-5 hidden-panel">
+      <h2 class="text-xl md:text-2xl font-extrabold text-center mb-3">🎨 Bước 2: Áo Mới Diệu Kỳ</h2>
+      <p class="text-center mb-2 font-semibold">👉 Chạm vào 1 ống, rồi chọn màu/họa tiết hoặc sticker thú cưng nhé!</p>
+      <div class="flex justify-center mb-4">
+        <div id="step2Board" class="flex gap-3 flex-wrap justify-center"></div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div>
+          <div class="font-bold text-lg mb-2">🖍️ Giấy Màu / Bút Màu</div>
+          <div id="colorPalette" class="flex gap-2 flex-wrap"></div>
+        </div>
+        <div>
+          <div class="font-bold text-lg mb-2">🐾 Sticker Thú Cưng</div>
+          <div id="stickerPalette" class="flex gap-2 flex-wrap"></div>
+        </div>
+      </div>
+      <div class="flex justify-between mt-3">
+        <button id="btnToStep1" class="btn-cartoon bg-gray-200 text-lg px-6 py-3">◀️ Bước 1</button>
+        <button id="btnToStep3" class="btn-cartoon bg-teal-300 text-lg px-6 py-3">Sang Bước 3 ▶️</button>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section id="step3Panel" class="cartoon-panel p-3 md:p-5 hidden-panel">
+      <h2 class="text-xl md:text-2xl font-extrabold text-center mb-3">🎈 Bước 3: Giải Cứu Đồ Dùng Học Tập</h2>
+      <div id="step3Intro" class="text-center py-6">
+        <p class="text-lg font-semibold mb-4">Chạm vỡ bóng bay để đồ dùng rơi gọn gàng vào ống nhé! (15 giây)</p>
+        <button id="btnStartMinigame" class="btn-cartoon bg-red-300 text-2xl px-10 py-5 anim-wiggle">🎈 Cất Đồ Dùng Ngay!</button>
+      </div>
+
+      <div id="step3Game" class="hidden-panel">
+        <div class="flex items-center justify-between mb-2 px-2">
+          <div class="text-2xl font-extrabold" id="minigameTimer">⏱️ 15</div>
+          <div class="flex-1 mx-3 h-6 bg-gray-200 rounded-full border-3 border-black overflow-hidden">
+            <div id="minigameProgressBar" class="h-full bg-green-400 transition-all" style="width:0%"></div>
+          </div>
+          <div class="text-xl font-extrabold" id="minigameProgressText">0/8</div>
+        </div>
+        <div id="minigameArena" class="relative rounded-2xl border-4 overflow-hidden" style="height:340px;background:linear-gradient(180deg,#e0f7ff,#ffffff);"></div>
+        <div class="flex gap-2 justify-center mt-3 flex-wrap" id="minigameTargets"></div>
+      </div>
+
+      <div id="step3Result" class="hidden-panel text-center py-6"></div>
+
+      <div class="flex justify-between mt-3">
+        <button id="btnToStep2b" class="btn-cartoon bg-gray-200 text-lg px-6 py-3">◀️ Bước 2</button>
+        <div></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- MASCOT BIU -->
+<div id="mascotWrap" class="fixed bottom-2 left-2 z-40 flex items-end gap-2 hidden-panel">
+  <div id="speechBubble" class="cartoon-panel speech-bubble bg-white px-4 py-2 max-w-[220px] text-sm md:text-base font-semibold mb-2 hidden-panel"></div>
+</div>
+<div id="mascotFixed" class="fixed bottom-2 left-2 z-40 hidden-panel">
+  <button id="btnBiuReplay" class="anim-float" title="Nhấn để Biu nói lại" style="background:none;border:none;cursor:pointer;">
+    <svg width="90" height="110" viewBox="0 0 90 110">
+      <ellipse cx="45" cy="100" rx="26" ry="8" fill="rgba(0,0,0,0.15)"/>
+      <path d="M20 70 Q45 55 70 70 L66 108 L24 108 Z" fill="#4fd1c5" stroke="#2d2a4a" stroke-width="3"/>
+      <circle cx="45" cy="42" r="26" fill="#ffd8a8" stroke="#2d2a4a" stroke-width="3"/>
+      <path d="M20 34 Q45 8 70 34 Q70 20 45 16 Q20 20 20 34 Z" fill="#5b3a29" stroke="#2d2a4a" stroke-width="3"/>
+      <circle cx="35" cy="44" r="4.2" fill="#2d2a4a" class="eye-blink"/>
+      <circle cx="55" cy="44" r="4.2" fill="#2d2a4a" class="eye-blink" style="animation-delay:.4s"/>
+      <circle cx="26" cy="50" r="5" fill="#ff9aa2" opacity="0.7"/>
+      <circle cx="64" cy="50" r="5" fill="#ff9aa2" opacity="0.7"/>
+      <path d="M33 55 Q45 64 57 55" stroke="#2d2a4a" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M20 78 Q8 70 6 58" stroke="#ffd8a8" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <path d="M70 78 Q80 66 78 54" stroke="#ffd8a8" stroke-width="10" fill="none" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+<button id="btnMuteSmall" class="fixed bottom-2 left-[100px] z-40 btn-cartoon bg-white px-2 py-1 text-lg hidden-panel">🔊</button>
+
+<!-- MODAL ROOT -->
+<div id="modalRoot"></div>
+
+<script>
+/* ========================= DATA ========================= */
+const GROUPS = [
+  {id:'to1', label:'Tổ 1', emoji:'🌸', color:'#f9a8d4'},
+  {id:'to2', label:'Tổ 2', emoji:'🚀', color:'#7dd3fc'},
+  {id:'to3', label:'Tổ 3', emoji:'🍀', color:'#86efac'},
+  {id:'to4', label:'Tổ 4', emoji:'⭐', color:'#fde047'},
+];
+
+const MATERIALS = [
+  {id:'tube', name:'Lõi giấy vệ sinh', shape:'cylinder', baseColor:'#d9a066'},
+  {id:'bottle', name:'Chai nhựa cắt đôi', shape:'cylinder', baseColor:'#a5e8f0'},
+  {id:'box', name:'Bìa carton cũ', shape:'box', baseColor:'#c68a4e'},
+];
+
+const BOARD_COLORS = ['#fde68a','#bfdbfe','#fecaca','#bbf7d0','#e9d5ff'];
+
+const COLORS = [
+  {id:'red', label:'Đỏ', type:'solid', value:'#ef4444'},
+  {id:'yellow', label:'Vàng', type:'solid', value:'#fbbf24'},
+  {id:'blue', label:'Xanh', type:'solid', value:'#38bdf8'},
+  {id:'pink', label:'Hồng', type:'solid', value:'#f472b6'},
+  {id:'rainbow', label:'Cầu vồng', type:'pattern'},
+  {id:'dots', label:'Chấm bi', type:'pattern'},
+  {id:'stripes', label:'Kẻ sọc', type:'pattern'},
+];
+
+const STICKERS = [
+  {id:'cat', label:'Mèo con', color:'#f8b4c4'},
+  {id:'dino', label:'Khủng long', color:'#86efac'},
+  {id:'rabbit', label:'Thỏ trắng', color:'#ffffff'},
+  {id:'panda', label:'Gấu trúc', color:'#f1f5f9'},
+  {id:'hero', label:'Siêu nhân', color:'#93c5fd'},
+];
+
+const ITEM_TYPES = {
+  pencil:  {label:'Bút chì', color:'#f59e0b'},
+  pen:     {label:'Bút mực', color:'#3b82f6'},
+  ruler:   {label:'Thước kẻ', color:'#facc15'},
+  crayon:  {label:'Bút màu', color:'#ec4899'},
+  scissors:{label:'Kéo', color:'#94a3b8'},
+};
+const ITEM_QUEUE_ORDER = ['pencil','pen','ruler','crayon','scissors','pencil','pen','ruler'];
+
+/* ========================= STATE ========================= */
+function createGroupState(){
+  return {
+    cardboardColor: BOARD_COLORS[0],
+    slots: [null,null,null,null],
+    selectedSlot: null,
+    stars: 0,
+    minigame: { active:false, done:false, success:false, timeLeft:15, collected:0, total:8,
+      spawnedCount:0, queueRemaining: ITEM_QUEUE_ORDER.slice() }
+  };
+}
+const state = {};
+GROUPS.forEach(g => state[g.id] = createGroupState());
+let currentGroup = 'to1';
+let currentStep = 1;
+let soundOn = true;
+
+/* ========================= AUDIO (Web Audio API synth) ========================= */
+let audioCtx = null;
+function ensureAudio(){ if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); } if(audioCtx.state==='suspended'){ audioCtx.resume(); } return audioCtx; }
+
+function playTone(freq, dur, type='sine', startGain=0.25, delay=0){
+  if(!soundOn) return;
+  const ctx = ensureAudio();
+  const t0 = ctx.currentTime + delay;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t0);
+  gain.gain.setValueAtTime(startGain, t0);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0 + dur + 0.02);
+}
+function playSlide(freqFrom, freqTo, dur, type='sine', startGain=0.2, delay=0){
+  if(!soundOn) return;
+  const ctx = ensureAudio();
+  const t0 = ctx.currentTime + delay;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freqFrom, t0);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(freqTo,20), t0+dur);
+  gain.gain.setValueAtTime(startGain, t0);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0+dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0); osc.stop(t0+dur+0.02);
+}
+function playNoiseBurst(dur=0.25, startGain=0.3, delay=0){
+  if(!soundOn) return;
+  const ctx = ensureAudio();
+  const bufferSize = ctx.sampleRate * dur;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for(let i=0;i<bufferSize;i++){ data[i] = (Math.random()*2-1) * (1 - i/bufferSize); }
+  const src = ctx.createBufferSource();
+  src.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = 1200;
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(startGain, ctx.currentTime+delay);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+delay+dur);
+  src.connect(filter).connect(gain).connect(ctx.destination);
+  src.start(ctx.currentTime+delay);
+}
+function playPop(){ playTone(680,0.12,'square',0.2); playTone(420,0.1,'sine',0.15,0.03); }
+function playSwoosh(){ playSlide(300,900,0.35,'sawtooth',0.12); }
+function playSparkle(){ [880,1100,1320,1568].forEach((f,i)=>playTone(f,0.18,'triangle',0.15,i*0.07)); }
+function playBurst(){ playNoiseBurst(0.22,0.3); playTone(200,0.1,'sine',0.15,0.02); }
+function playBuzzer(){ for(let i=0;i<3;i++){ playTone(180,0.25,'square',0.25,i*0.3); } }
+function playTick(){ playTone(1000,0.06,'square',0.12); }
+function playFanfare(){
+  const notes=[523.25,659.25,784,1046.5];
+  notes.forEach((f,i)=>playTone(f, i===notes.length-1?0.6:0.22,'triangle',0.22,i*0.18));
+  setTimeout(()=>playSparkle(), 500);
+}
+
+/* ========================= SPEECH ========================= */
+function speak(text){
+  if(!soundOn) return;
+  try{
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'vi-VN';
+    utter.rate = 0.92;
+    utter.pitch = 1.15;
+    const voices = window.speechSynthesis.getVoices();
+    const viVoice = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('vi'));
+    if(viVoice) utter.voice = viVoice;
+    window.speechSynthesis.speak(utter);
+  }catch(e){}
+}
+let lastBiuText = 'Chào các con!';
+function biuSay(text){
+  lastBiuText = text;
+  const bubble = document.getElementById('speechBubble');
+  bubble.textContent = text;
+  bubble.classList.remove('hidden-panel');
+  bubble.classList.remove('anim-bounceIn'); void bubble.offsetWidth; bubble.classList.add('anim-bounceIn');
+  speak(text);
+}
+document.getElementById('btnBiuReplay').addEventListener('click', ()=>{ speak(lastBiuText); });
+
+/* ========================= MODAL HELPER ========================= */
+function showModal(innerHTML){
+  const root = document.getElementById('modalRoot');
+  root.innerHTML = `<div class="modal-overlay" id="dynModalOverlay">
+      <div class="cartoon-panel bg-white p-5 md:p-7 max-w-3xl w-full anim-bounceIn" style="max-height:90vh;overflow-y:auto;">${innerHTML}</div>
+    </div>`;
+}
+function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
+
+/* ========================= SVG ICONS ========================= */
+function iconPencil(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <g transform="rotate(45 20 20)">
+      <rect x="14" y="4" width="12" height="26" rx="2" fill="#f59e0b" stroke="#2d2a4a" stroke-width="2"/>
+      <polygon points="14,30 26,30 20,38" fill="#e2b98a" stroke="#2d2a4a" stroke-width="2"/>
+      <polygon points="18,34 22,34 20,38" fill="#4b3621"/>
+      <rect x="14" y="4" width="12" height="6" fill="#f9d976" stroke="#2d2a4a" stroke-width="2"/>
+      <rect x="14" y="2" width="12" height="4" rx="1" fill="#fda4af" stroke="#2d2a4a" stroke-width="2"/>
+    </g></svg>`;
+}
+function iconPen(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <g transform="rotate(45 20 20)">
+      <rect x="14" y="6" width="12" height="24" rx="4" fill="#3b82f6" stroke="#2d2a4a" stroke-width="2"/>
+      <polygon points="14,30 26,30 20,38" fill="#cbd5e1" stroke="#2d2a4a" stroke-width="2"/>
+      <rect x="16" y="2" width="8" height="6" rx="2" fill="#1e3a8a" stroke="#2d2a4a" stroke-width="2"/>
+      <rect x="15" y="12" width="10" height="4" fill="#93c5fd"/>
+    </g></svg>`;
+}
+function iconRuler(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <g transform="rotate(20 20 20)">
+      <rect x="4" y="14" width="32" height="12" rx="2" fill="#facc15" stroke="#2d2a4a" stroke-width="2"/>
+      ${[0,1,2,3,4,5,6].map(i=>`<line x1="${6+i*4.3}" y1="14" x2="${6+i*4.3}" y2="${i%2===0?20:17}" stroke="#2d2a4a" stroke-width="1.4"/>`).join('')}
+    </g></svg>`;
+}
+function iconCrayon(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <g transform="rotate(45 20 20)">
+      <rect x="14" y="6" width="12" height="24" rx="6" fill="#ec4899" stroke="#2d2a4a" stroke-width="2"/>
+      <path d="M14 12 Q20 8 26 12" stroke="#fbcfe8" stroke-width="2" fill="none"/>
+      <ellipse cx="20" cy="32" rx="6" ry="4" fill="#f9a8d4" stroke="#2d2a4a" stroke-width="2"/>
+    </g></svg>`;
+}
+function iconScissors(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <circle cx="10" cy="30" r="5" fill="none" stroke="#94a3b8" stroke-width="3"/>
+    <circle cx="10" cy="10" r="5" fill="none" stroke="#94a3b8" stroke-width="3"/>
+    <path d="M12 28 L34 8" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+    <path d="M12 12 L34 32" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
+  </svg>`;
+}
+const ITEM_ICON_FN = { pencil:iconPencil, pen:iconPen, ruler:iconRuler, crayon:iconCrayon, scissors:iconScissors };
+
+function iconMaterial(mat){
+  if(mat.id==='tube'){
+    return `<svg width="60" height="70" viewBox="0 0 60 70">
+      <rect x="12" y="8" width="36" height="54" rx="6" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3"/>
+      <ellipse cx="30" cy="8" rx="18" ry="6" fill="#e8c39e" stroke="#2d2a4a" stroke-width="3"/>
+      <path d="M14 20 Q30 24 46 20" stroke="#b5793a" stroke-width="2" fill="none" opacity="0.6"/>
+      <path d="M14 34 Q30 38 46 34" stroke="#b5793a" stroke-width="2" fill="none" opacity="0.6"/>
+    </svg>`;
+  }
+  if(mat.id==='bottle'){
+    return `<svg width="60" height="70" viewBox="0 0 60 70">
+      <path d="M20 10 h20 v8 l6 8 v34 a4 4 0 0 1 -4 4 H18 a4 4 0 0 1 -4 -4 V26 l6 -8 Z" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3" opacity="0.85"/>
+      <rect x="22" y="4" width="16" height="8" rx="2" fill="#60a5fa" stroke="#2d2a4a" stroke-width="3"/>
+      <line x1="16" y1="40" x2="44" y2="40" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+    </svg>`;
+  }
+  return `<svg width="60" height="70" viewBox="0 0 60 70">
+    <rect x="8" y="14" width="44" height="46" rx="4" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3"/>
+    <path d="M8 14 L20 4 H40 L52 14" fill="none" stroke="#2d2a4a" stroke-width="3"/>
+    <path d="M8 14 L20 4 M52 14 L40 4" stroke="#8a5a2e" stroke-width="2"/>
+    <line x1="14" y1="30" x2="46" y2="30" stroke="#8a5a2e" stroke-width="2" opacity="0.5"/>
+    <line x1="14" y1="42" x2="46" y2="42" stroke="#8a5a2e" stroke-width="2" opacity="0.5"/>
+  </svg>`;
+}
+
+function glueIcon(size=44){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <rect x="10" y="10" width="20" height="24" rx="4" fill="#fde68a" stroke="#2d2a4a" stroke-width="2.5"/>
+    <rect x="15" y="2" width="10" height="10" rx="2" fill="#fb7185" stroke="#2d2a4a" stroke-width="2.5"/>
+    <circle cx="20" cy="22" r="6" fill="#fff7c2"/>
+    <text x="20" y="25" font-size="8" text-anchor="middle" font-weight="bold" fill="#2d2a4a">GLUE</text>
+  </svg>`;
+}
+
+/* Pattern defs for tube fills (returns {defsHTML, fillValue}) */
+let patCounter = 0;
+function getFillFor(colorId, uidSeed){
+  if(!colorId) return {defs:'', fill:'#f1f5f9'};
+  const color = COLORS.find(c=>c.id===colorId);
+  if(!color) return {defs:'', fill:'#f1f5f9'};
+  if(color.type==='solid') return {defs:'', fill: color.value};
+  const pid = `pat_${uidSeed}_${colorId}_${patCounter++}`;
+  if(colorId==='rainbow'){
+    return { defs:`<linearGradient id="${pid}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#f87171"/><stop offset="20%" stop-color="#fbbf24"/>
+        <stop offset="40%" stop-color="#34d399"/><stop offset="60%" stop-color="#60a5fa"/>
+        <stop offset="80%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f472b6"/>
+      </linearGradient>`, fill:`url(#${pid})`};
+  }
+  if(colorId==='dots'){
+    return { defs:`<pattern id="${pid}" width="14" height="14" patternUnits="userSpaceOnUse">
+        <rect width="14" height="14" fill="#93c5fd"/>
+        <circle cx="7" cy="7" r="3.4" fill="#ffffff"/>
+      </pattern>`, fill:`url(#${pid})`};
+  }
+  if(colorId==='stripes'){
+    return { defs:`<pattern id="${pid}" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+        <rect width="14" height="14" fill="#fca5a5"/>
+        <rect width="7" height="14" fill="#ffffff"/>
+      </pattern>`, fill:`url(#${pid})`};
+  }
+  return {defs:'', fill:'#f1f5f9'};
+}
+
+function stickerEarsAndFace(stickerId, uidSeed){
+  if(!stickerId) return '';
+  const blink1 = `class="eye-blink"`;
+  const blink2 = `class="eye-blink" style="animation-delay:.5s"`;
+  if(stickerId==='cat'){
+    return `<path d="M14 6 L24 -8 L30 10 Z" fill="#f8b4c4" stroke="#2d2a4a" stroke-width="2.5"/>
+      <path d="M56 6 L46 -8 L40 10 Z" fill="#f8b4c4" stroke="#2d2a4a" stroke-width="2.5"/>
+      <circle cx="27" cy="34" r="4" fill="#2d2a4a" ${blink1}/>
+      <circle cx="43" cy="34" r="4" fill="#2d2a4a" ${blink2}/>
+      <path d="M31 44 Q35 47 31 49 M39 44 Q35 47 39 49" stroke="#2d2a4a" stroke-width="2" fill="none"/>
+      <line x1="10" y1="42" x2="24" y2="40" stroke="#2d2a4a" stroke-width="1.5"/>
+      <line x1="10" y1="47" x2="24" y2="47" stroke="#2d2a4a" stroke-width="1.5"/>
+      <line x1="60" y1="42" x2="46" y2="40" stroke="#2d2a4a" stroke-width="1.5"/>
+      <line x1="60" y1="47" x2="46" y2="47" stroke="#2d2a4a" stroke-width="1.5"/>`;
+  }
+  if(stickerId==='dino'){
+    return `<path d="M20 6 L28 -10 L34 6 L28 2 Z" fill="#86efac" stroke="#2d2a4a" stroke-width="2.5"/>
+      <path d="M36 6 L42 -8 L48 6 L42 2 Z" fill="#86efac" stroke="#2d2a4a" stroke-width="2.5"/>
+      <circle cx="27" cy="34" r="4.2" fill="#2d2a4a" ${blink1}/>
+      <circle cx="43" cy="34" r="4.2" fill="#2d2a4a" ${blink2}/>
+      <path d="M28 46 Q35 50 42 46" stroke="#2d2a4a" stroke-width="2" fill="none"/>`;
+  }
+  if(stickerId==='rabbit'){
+    return `<ellipse cx="24" cy="-6" rx="6" ry="18" fill="#ffffff" stroke="#2d2a4a" stroke-width="2.5"/>
+      <ellipse cx="46" cy="-6" rx="6" ry="18" fill="#ffffff" stroke="#2d2a4a" stroke-width="2.5"/>
+      <ellipse cx="24" cy="-6" rx="2.6" ry="12" fill="#fbcfe8"/>
+      <ellipse cx="46" cy="-6" rx="2.6" ry="12" fill="#fbcfe8"/>
+      <circle cx="27" cy="34" r="4" fill="#2d2a4a" ${blink1}/>
+      <circle cx="43" cy="34" r="4" fill="#2d2a4a" ${blink2}/>
+      <circle cx="35" cy="42" r="2.6" fill="#f472b6"/>`;
+  }
+  if(stickerId==='panda'){
+    return `<circle cx="18" cy="2" r="10" fill="#0f172a" stroke="#2d2a4a" stroke-width="2.5"/>
+      <circle cx="52" cy="2" r="10" fill="#0f172a" stroke="#2d2a4a" stroke-width="2.5"/>
+      <ellipse cx="27" cy="34" rx="7" ry="8" fill="#0f172a"/>
+      <ellipse cx="43" cy="34" rx="7" ry="8" fill="#0f172a"/>
+      <circle cx="27" cy="34" r="3.4" fill="#ffffff" ${blink1}/>
+      <circle cx="43" cy="34" r="3.4" fill="#ffffff" ${blink2}/>
+      <circle cx="27" cy="34" r="1.6" fill="#2d2a4a"/>
+      <circle cx="43" cy="34" r="1.6" fill="#2d2a4a"/>`;
+  }
+  if(stickerId==='hero'){
+    return `<path d="M12 20 Q35 -6 58 20 L52 24 Q35 4 18 24 Z" fill="#1d4ed8" stroke="#2d2a4a" stroke-width="2.5"/>
+      <rect x="20" y="30" width="30" height="10" rx="3" fill="#1d4ed8" stroke="#2d2a4a" stroke-width="2.5"/>
+      <circle cx="27" cy="35" r="3.4" fill="#ffffff" ${blink1}/>
+      <circle cx="43" cy="35" r="3.4" fill="#ffffff" ${blink2}/>
+      <path d="M28 48 Q35 52 42 48" stroke="#2d2a4a" stroke-width="2" fill="none"/>`;
+  }
+  return '';
+}
+
+/* Render a full tube/container as SVG, with color/pattern/sticker/peeking items */
+function renderTubeSVG(tube, uidSeed, opts={}){
+  const w = opts.w || 90, h = opts.h || 130;
+  const shape = tube.shape || 'cylinder';
+  const {defs, fill} = getFillFor(tube.color, uidSeed);
+  const baseFillIfNone = shape==='box' ? '#c68a4e' : '#d9a066';
+  const bodyFill = tube.color ? fill : baseFillIfNone;
+  const peekIcons = (tube.peeking||[]).slice(0,6).map((it,i)=>{
+    const fn = ITEM_ICON_FN[it]; if(!fn) return '';
+    const x = 10 + (i%3)*24;
+    const y = shape==='box' ? -6 - Math.floor(i/3)*14 : -10 - Math.floor(i/3)*14;
+    return `<g transform="translate(${x},${y}) scale(0.55)">${fn(40)}</g>`;
+  }).join('');
+
+  let bodyShape;
+  if(shape==='box'){
+    bodyShape = `<rect x="10" y="20" width="${w-20}" height="${h-30}" rx="8" fill="${bodyFill}" stroke="#2d2a4a" stroke-width="3.5"/>`;
+  } else {
+    bodyShape = `<rect x="10" y="14" width="${w-20}" height="${h-24}" rx="14" fill="${bodyFill}" stroke="#2d2a4a" stroke-width="3.5"/>
+      <ellipse cx="${w/2}" cy="14" rx="${(w-20)/2}" ry="7" fill="${bodyFill}" stroke="#2d2a4a" stroke-width="3.5"/>`;
+  }
+
+  const faceGroup = tube.sticker ? `<g transform="translate(0,0)">${stickerEarsAndFace(tube.sticker, uidSeed)}</g>` : '';
+
+  return `<svg width="${w}" height="${h+40}" viewBox="-5 -25 ${w+10} ${h+50}" overflow="visible">
+    <defs>${defs}</defs>
+    <g>${bodyShape}</g>
+    <g transform="translate(${w/2-35},${shape==='box'?24:20})">${faceGroup}</g>
+    <g transform="translate(0,${shape==='box'?20:14})">${peekIcons}</g>
+  </svg>`;
+}
+
+/* ========================= HEADER: GROUP TABS ========================= */
+function renderGroupTabs(){
+  const wrap = document.getElementById('groupTabs');
+  wrap.innerHTML = GROUPS.map(g => `
+    <button data-group="${g.id}" class="tab-group btn-cartoon px-3 py-2 text-sm md:text-base ${g.id===currentGroup?'active':''}"
+      style="background:${g.color};">
+      ${g.emoji} ${g.label}
+      <span class="ml-1 text-yellow-600">${'⭐'.repeat(Math.min(state[g.id].stars,3))}${state[g.id].stars>3?('+'+(state[g.id].stars-3)):''}</span>
+    </button>`).join('');
+  wrap.querySelectorAll('[data-group]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ switchGroup(btn.dataset.group); });
+  });
+}
+function switchGroup(id){
+  if(id===currentGroup) return;
+  pauseMinigameLoop();
+  currentGroup = id;
+  renderGroupTabs();
+  renderStepIndicator();
+  renderStep1(); renderStep2(); renderStep3();
+  const g = GROUPS.find(x=>x.id===id);
+  biuSay(`Chào ${g.label}! Chúng ta cùng làm tiếp nào!`);
+}
+
+/* ========================= STEP INDICATOR ========================= */
+function renderStepIndicator(){
+  const wrap = document.getElementById('stepIndicator');
+  const steps = [1,2,3];
+  wrap.innerHTML = steps.map((n,i)=>`
+    <div class="flex items-center gap-3">
+      <div class="step-dot ${n===currentStep?'current':(n<currentStep?'done':'')}" data-step="${n}">${n<currentStep?'✓':n}</div>
+      ${i<2?'<div style="width:30px;height:5px;background:#2d2a4a;border-radius:4px;"></div>':''}
+    </div>`).join('');
+  wrap.querySelectorAll('[data-step]').forEach(dot=>{
+    dot.addEventListener('click', ()=> switchStep(parseInt(dot.dataset.step,10)));
+  });
+}
+function switchStep(n){
+  pauseMinigameLoop();
+  currentStep = n;
+  document.getElementById('step1Panel').classList.toggle('hidden-panel', n!==1);
+  document.getElementById('step2Panel').classList.toggle('hidden-panel', n!==2);
+  document.getElementById('step3Panel').classList.toggle('hidden-panel', n!==3);
+  renderStepIndicator();
+  if(n===1){ renderStep1(); biuSay('Con hãy ghép đồ cũ lên bìa cứng nhé!'); }
+  if(n===2){ renderStep2(); biuSay('Giờ mình khoác áo mới cho các ống nhé!'); }
+  if(n===3){ renderStep3(); biuSay('Chạm vỡ bóng bay để cất đồ dùng học tập nào!'); }
+}
+
+/* ========================= STEP 1 ========================= */
+function renderMaterialList(){
+  const wrap = document.getElementById('materialList');
+  wrap.innerHTML = MATERIALS.map(m => `
+    <div class="material-card cartoon-panel p-2 flex flex-col items-center bg-amber-50" data-mat="${m.id}" style="min-width:84px;">
+      ${iconMaterial(m)}
+      <div class="text-xs font-bold text-center mt-1">${m.name}</div>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-mat]').forEach(card=>{
+    card.addEventListener('click', ()=> placeMaterial(card.dataset.mat));
+  });
+}
+function placeMaterial(matId){
+  const g = state[currentGroup];
+  const emptyIdx = g.slots.findIndex(s=>s===null);
+  if(emptyIdx===-1){ biuSay('Bìa cứng đầy rồi, tối đa 4 ống thôi nhé!'); return; }
+  const mat = MATERIALS.find(m=>m.id===matId);
+  g.slots[emptyIdx] = { materialId: mat.id, shape: mat.shape, color:null, pattern:null, sticker:null, peeking:[] };
+  playSwoosh();
+  setTimeout(()=>playPop(), 150);
+  renderStep1(true, emptyIdx);
+  if(g.slots.filter(s=>s).length===1) biuSay('Bụp! Con dán được 1 ống rồi, hay quá!');
+}
+function renderCardboardColorPicker(){
+  const wrap = document.getElementById('cardboardColorPicker');
+  wrap.innerHTML = BOARD_COLORS.map(c=>`<div class="color-swatch" data-color="${c}" style="width:32px;height:32px;border-radius:50%;background:${c};border:3px solid #2d2a4a;"></div>`).join('');
+  wrap.querySelectorAll('[data-color]').forEach(sw=>{
+    sw.addEventListener('click', ()=>{ state[currentGroup].cardboardColor = sw.dataset.color; renderStep1(); playPop(); });
+  });
+}
+function renderStep1(justPlaced, placedIdx){
+  renderMaterialList();
+  renderCardboardColorPicker();
+  const g = state[currentGroup];
+  const board = document.getElementById('cardboardBoard');
+  board.style.background = g.cardboardColor;
+  board.style.borderColor = '#2d2a4a';
+  const count = g.slots.filter(s=>s).length;
+  board.innerHTML = `<div class="absolute top-1 left-2 text-xs md:text-sm font-extrabold bg-white/70 px-2 rounded-full">Bìa cứng 16x20cm</div>
+    <div class="grid grid-cols-2 gap-3 h-full items-center justify-center pt-6" id="slotsGrid"></div>`;
+  const grid = document.getElementById('slotsGrid');
+  grid.innerHTML = g.slots.map((s,i)=>{
+    if(!s){
+      return `<div class="slot-empty flex items-center justify-center" style="height:90px;">
+        <span class="text-3xl opacity-40">➕</span></div>`;
+    }
+    const mat = MATERIALS.find(m=>m.id===s.materialId);
+    return `<div class="flex items-center justify-center relative" style="height:100px;">
+      ${justPlaced && i===placedIdx ? `<div class="glue-sweep absolute inset-0 flex items-center justify-center">${glueIcon(50)}</div>` : ''}
+      <div style="transform:scale(0.85)">${iconMaterial(mat)}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('slotCountText').textContent = `Đã ghép: ${count}/4 ống`;
+  document.getElementById('btnToStep2').disabled = count===0;
+}
+
+/* ========================= STEP 2 ========================= */
+let selectedTubeIdx = null;
+function renderStep2(){
+  const g = state[currentGroup];
+  const board = document.getElementById('step2Board');
+  const placed = g.slots.map((s,i)=>({s,i})).filter(x=>x.s);
+  if(placed.length===0){
+    board.innerHTML = `<div class="text-center font-semibold text-gray-500 py-8">Con chưa ghép ống nào ở Bước 1 cả. Quay lại Bước 1 nhé!</div>`;
+  } else {
+    board.innerHTML = placed.map(({s,i})=>`
+      <div class="cartoon-panel p-2 bg-sky-50 flex flex-col items-center ${selectedTubeIdx===i?'tube-select-ring':''}" data-tubeidx="${i}" style="cursor:pointer;">
+        ${renderTubeSVG(s, currentGroup+'_'+i, {w:80,h:110})}
+        <div class="text-xs font-bold mt-1">Ống ${i+1}</div>
+      </div>`).join('');
+    board.querySelectorAll('[data-tubeidx]').forEach(card=>{
+      card.addEventListener('click', ()=>{ selectedTubeIdx = parseInt(card.dataset.tubeidx,10); renderStep2(); playPop(); });
+    });
+  }
+  renderColorPalette();
+  renderStickerPalette();
+  const anyColored = g.slots.some(s=>s && s.color);
+  document.getElementById('btnToStep3').disabled = !(placed.length>0);
+}
+function renderColorPalette(){
+  const wrap = document.getElementById('colorPalette');
+  wrap.innerHTML = COLORS.map(c=>{
+    const bg = c.type==='solid' ? c.value :
+      c.id==='rainbow' ? 'linear-gradient(90deg,#f87171,#fbbf24,#34d399,#60a5fa,#a78bfa)' :
+      c.id==='dots' ? 'radial-gradient(circle,#fff 30%,#93c5fd 31%)' :
+      'repeating-linear-gradient(45deg,#fca5a5,#fca5a5 6px,#fff 6px,#fff 12px)';
+    return `<div class="color-swatch cartoon-panel flex flex-col items-center p-1" data-color="${c.id}" style="width:64px;">
+      <div style="width:44px;height:44px;border-radius:12px;background:${bg};border:3px solid #2d2a4a;"></div>
+      <div class="text-[11px] font-bold text-center mt-1">${c.label}</div>
+    </div>`;
+  }).join('');
+  wrap.querySelectorAll('[data-color]').forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+      if(selectedTubeIdx===null){ biuSay('Con hãy chạm chọn 1 ống trước nhé!'); return; }
+      const g = state[currentGroup];
+      const tube = g.slots[selectedTubeIdx];
+      if(!tube) return;
+      tube.color = sw.dataset.color;
+      playSparkle();
+      renderStep2();
+      biuSay('Đẹp quá! Ống của con có áo mới rồi!');
+    });
+  });
+}
+function renderStickerPalette(){
+  const wrap = document.getElementById('stickerPalette');
+  wrap.innerHTML = STICKERS.map(s=>`
+    <div class="sticker-card cartoon-panel flex flex-col items-center p-1" data-sticker="${s.id}" style="width:64px;">
+      <svg width="44" height="44" viewBox="-20 -20 90 70"><g transform="translate(20,20)">${stickerEarsAndFace(s.id,'pal')}</g></svg>
+      <div class="text-[11px] font-bold text-center mt-1">${s.label}</div>
+    </div>`).join('');
+  wrap.querySelectorAll('[data-sticker]').forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+      if(selectedTubeIdx===null){ biuSay('Con hãy chạm chọn 1 ống trước nhé!'); return; }
+      const g = state[currentGroup];
+      const tube = g.slots[selectedTubeIdx];
+      if(!tube) return;
+      tube.sticker = sw.dataset.sticker;
+      playSparkle();
+      renderStep2();
+      biuSay('Ôi dễ thương quá, bạn thú cưng mới xuất hiện rồi!');
+    });
+  });
+}
+
+/* ========================= STEP 3: MINIGAME ========================= */
+let mgRAF = null, mgInterval = null, mgBalloons = [], mgUidCounter = 0, mgLastTs = null;
+
+function pauseMinigameLoop(){
+  if(mgRAF){ cancelAnimationFrame(mgRAF); mgRAF=null; }
+  if(mgInterval){ clearInterval(mgInterval); mgInterval=null; }
+  if(mgBalloons.length){
+    const g = state[currentGroup];
+    if(g && g.minigame){
+      mgBalloons.forEach(b => {
+        g.minigame.queueRemaining.unshift(b.item);
+        g.minigame.spawnedCount = Math.max(0, g.minigame.spawnedCount - 1);
+      });
+    }
+  }
+  mgBalloons = [];
+  mgLastTs = null;
+  const arena = document.getElementById('minigameArena');
+  if(arena) arena.innerHTML = '';
+}
+
+function renderStep3(){
+  const g = state[currentGroup];
+  const intro = document.getElementById('step3Intro');
+  const game = document.getElementById('step3Game');
+  const result = document.getElementById('step3Result');
+  const hasTubes = g.slots.some(s=>s);
+
+  if(g.minigame.done){
+    intro.classList.add('hidden-panel'); game.classList.add('hidden-panel');
+    result.classList.remove('hidden-panel');
+    renderMinigameResult();
+    return;
+  }
+  if(g.minigame.active){
+    intro.classList.add('hidden-panel'); result.classList.add('hidden-panel');
+    game.classList.remove('hidden-panel');
+    renderMinigameTargets();
+    document.getElementById('minigameTimer').textContent = `⏱️ ${g.minigame.timeLeft}`;
+    updateMinigameProgressUI();
+    if(!mgRAF){ startMinigameLoops(); }
+    return;
+  }
+  result.classList.add('hidden-panel'); game.classList.add('hidden-panel');
+  intro.classList.remove('hidden-panel');
+  document.getElementById('btnStartMinigame').disabled = !hasTubes;
+  document.getElementById('btnStartMinigame').style.opacity = hasTubes ? '1':'0.5';
+}
+
+function renderMinigameTargets(){
+  const g = state[currentGroup];
+  const wrap = document.getElementById('minigameTargets');
+  const placed = g.slots.map((s,i)=>({s,i})).filter(x=>x.s);
+  wrap.innerHTML = placed.map(({s,i})=>`
+    <div id="tubeTarget-${i}" class="flex flex-col items-center">
+      ${renderTubeSVG(s, currentGroup+'_mg_'+i, {w:70,h:95})}
+    </div>`).join('');
+}
+
+function startMinigame(){
+  const g = state[currentGroup];
+  if(!g.slots.some(s=>s)) { biuSay('Con cần ghép ít nhất 1 ống ở Bước 1 trước nhé!'); return; }
+  g.minigame = { active:true, done:false, success:false, timeLeft:15, collected:0, total:8,
+    spawnedCount:0, queueRemaining: ITEM_QUEUE_ORDER.slice() };
+  g.slots.forEach(s=>{ if(s) s.peeking = []; });
+  renderStep3();
+  biuSay('Bắt đầu! Chạm vỡ bóng bay thật nhanh nào!');
+}
+
+function startMinigameLoops(){
+  mgBalloons = [];
+  mgUidCounter = 0;
+  mgLastTs = null;
+  const g = state[currentGroup];
+  const initialCount = Math.min(4, g.minigame.queueRemaining.length);
+  for(let i=0;i<initialCount;i++){ spawnBalloon(); }
+
+  mgInterval = setInterval(()=>{
+    const g2 = state[currentGroup];
+    if(!g2.minigame.active) return;
+    g2.minigame.timeLeft -= 1;
+    const timerEl = document.getElementById('minigameTimer');
+    if(timerEl){
+      timerEl.textContent = `⏱️ ${g2.minigame.timeLeft}`;
+      timerEl.classList.toggle('timer-danger', g2.minigame.timeLeft<=5 && g2.minigame.timeLeft>0);
+    }
+    if(g2.minigame.timeLeft<=5 && g2.minigame.timeLeft>0){ playTick(); }
+    if(g2.minigame.timeLeft<=0){
+      endMinigame(false);
+    }
+  }, 1000);
+
+  mgRAF = requestAnimationFrame(minigameFrame);
+}
+
+function spawnBalloon(){
+  const g = state[currentGroup];
+  if(g.minigame.queueRemaining.length===0) return;
+  const arena = document.getElementById('minigameArena');
+  if(!arena) return;
+  const item = g.minigame.queueRemaining.shift();
+  g.minigame.spawnedCount++;
+  const colors = ['#f87171','#60a5fa','#fbbf24','#34d399','#a78bfa','#f472b6'];
+  const color = colors[Math.floor(Math.random()*colors.length)];
+  const uid = mgUidCounter++;
+  const el = document.createElement('div');
+  el.className = 'balloon anim-pop';
+  el.dataset.uid = uid;
+  const baseX = 10 + Math.random()*75;
+  el.style.left = baseX + '%';
+  el.style.bottom = '-70px';
+  el.innerHTML = `<div class="balloon-body" style="width:56px;height:66px;background:${color};border:3px solid #2d2a4a;display:flex;align-items:center;justify-content:center;">
+      <div style="transform:scale(0.7)">${ITEM_ICON_FN[item](40)}</div>
+    </div>`;
+  arena.appendChild(el);
+  el.addEventListener('pointerdown', (e)=>{ e.preventDefault(); popBalloon(uid); });
+  mgBalloons.push({ uid, el, baseX, phase: Math.random()*Math.PI*2, speed: 26+Math.random()*18, item });
+}
+
+function minigameFrame(ts){
+  const g = state[currentGroup];
+  if(!g.minigame.active){ mgRAF=null; return; }
+  if(mgLastTs===null) mgLastTs = ts;
+  const dt = (ts - mgLastTs)/1000;
+  mgLastTs = ts;
+  const arena = document.getElementById('minigameArena');
+  const arenaH = arena ? arena.clientHeight : 340;
+  mgBalloons.forEach(b=>{
+    const curBottom = parseFloat(b.el.style.bottom) || 0;
+    let newBottom = curBottom + b.speed*dt;
+    if(newBottom > arenaH + 70){ newBottom = -70; b.baseX = 10+Math.random()*75; }
+    b.el.style.bottom = newBottom + 'px';
+    const sway = Math.sin(ts/1000*1.2 + b.phase)*6;
+    b.el.style.left = (b.baseX + sway) + '%';
+  });
+  mgRAF = requestAnimationFrame(minigameFrame);
+}
+
+function popBalloon(uid){
+  const g = state[currentGroup];
+  if(!g.minigame.active) return;
+  const idx = mgBalloons.findIndex(b=>b.uid===uid);
+  if(idx===-1) return;
+  const b = mgBalloons[idx];
+  const arena = document.getElementById('minigameArena');
+  const arenaRect = arena.getBoundingClientRect();
+  const balloonRect = b.el.getBoundingClientRect();
+  const startX = balloonRect.left - arenaRect.left + balloonRect.width/2;
+  const startY = balloonRect.top - arenaRect.top + balloonRect.height/2;
+
+  playBurst();
+  b.el.remove();
+  mgBalloons.splice(idx,1);
+
+  const placed = g.slots.map((s,i)=>({s,i})).filter(x=>x.s);
+  const target = placed[Math.floor(Math.random()*placed.length)];
+
+  const fly = document.createElement('div');
+  fly.className = 'falling-item';
+  fly.style.left = startX + 'px';
+  fly.style.top = startY + 'px';
+  fly.innerHTML = `<div style="transform:scale(0.7)">${ITEM_ICON_FN[b.item](40)}</div>`;
+  arena.appendChild(fly);
+
+  requestAnimationFrame(()=>{
+    const targetEl = document.getElementById('tubeTarget-'+target.i);
+    let destX = startX, destY = arenaRect.height - 20;
+    if(targetEl){
+      const tr = targetEl.getBoundingClientRect();
+      destX = tr.left - arenaRect.left + tr.width/2 - 10;
+      destY = arenaRect.height - 10;
+    }
+    fly.style.left = destX + 'px';
+    fly.style.top = destY + 'px';
+    fly.style.transform = 'scale(0.4)';
+  });
+  setTimeout(()=>{
+    fly.remove();
+    target.s.peeking = target.s.peeking || [];
+    target.s.peeking.push(b.item);
+    renderMinigameTargets();
+  }, 560);
+
+  g.minigame.collected = Math.min(g.minigame.collected+1, g.minigame.total);
+  updateMinigameProgressUI();
+
+  if(g.minigame.spawnedCount < g.minigame.total && g.minigame.queueRemaining.length>0){
+    spawnBalloon();
+  }
+  if(g.minigame.collected >= g.minigame.total){
+    endMinigame(true);
+  }
+}
+
+function updateMinigameProgressUI(){
+  const g = state[currentGroup];
+  const pct = Math.round((g.minigame.collected/g.minigame.total)*100);
+  const bar = document.getElementById('minigameProgressBar');
+  const txt = document.getElementById('minigameProgressText');
+  if(bar) bar.style.width = pct+'%';
+  if(txt) txt.textContent = `${g.minigame.collected}/${g.minigame.total}`;
+}
+
+function endMinigame(success){
+  const g = state[currentGroup];
+  pauseMinigameLoop();
+  g.minigame.active = false;
+  g.minigame.done = true;
+  g.minigame.success = success;
+  const arena = document.getElementById('minigameArena');
+  if(arena) arena.innerHTML = '';
+  if(success){
+    playFanfare();
+    if(window.confetti) confetti({particleCount:150, spread:90, origin:{y:0.5}});
+    biuSay('Tuyệt vời! Chiến Binh Tái Chế Xanh xuất sắc!');
+  } else {
+    playBuzzer();
+    biuSay('Sắp xong rồi, thử lại lần nữa nhé!');
+  }
+  renderStep3();
+}
+
+function renderMinigameResult(){
+  const g = state[currentGroup];
+  const wrap = document.getElementById('step3Result');
+  if(g.minigame.success){
+    wrap.innerHTML = `
+      <div class="text-6xl mb-2 anim-bounceIn">🏅</div>
+      <div class="text-2xl font-extrabold mb-2">Chúc mừng! Huy chương "Chiến Binh Tái Chế Xanh"</div>
+      <div class="text-lg mb-4">Đã cất gọn ${g.minigame.collected}/${g.minigame.total} đồ dùng học tập!</div>
+      <button id="btnReplayMinigame" class="btn-cartoon bg-teal-300 text-lg px-6 py-3">🔁 Chơi Lại</button>`;
+  } else {
+    wrap.innerHTML = `
+      <div class="text-6xl mb-2">💪</div>
+      <div class="text-2xl font-extrabold mb-2">Cố lên! Đã cất được ${g.minigame.collected}/${g.minigame.total}</div>
+      <button id="btnReplayMinigame" class="btn-cartoon bg-yellow-300 text-lg px-6 py-3">🔁 Chơi Lại</button>`;
+  }
+  document.getElementById('btnReplayMinigame').addEventListener('click', ()=>{
+    g.minigame = { active:false, done:false, success:false, timeLeft:15, collected:0, total:8,
+      spawnedCount:0, queueRemaining: ITEM_QUEUE_ORDER.slice() };
+    g.slots.forEach(s=>{ if(s) s.peeking = []; });
+    renderStep3();
+  });
+}
+
+/* ========================= GLOBAL 5-MIN TEACHER TIMER ========================= */
+let globalTimeLeft = 300;
+let globalTimerInterval = null;
+function updateTimerDisplay(){
+  const m = Math.floor(globalTimeLeft/60).toString().padStart(2,'0');
+  const s = (globalTimeLeft%60).toString().padStart(2,'0');
+  const el = document.getElementById('timerDisplay');
+  el.textContent = `${m}:${s}`;
+  el.classList.toggle('timer-danger', globalTimeLeft<=10 && globalTimeLeft>0);
+}
+document.getElementById('btnTimerStart').addEventListener('click', ()=>{
+  ensureAudio();
+  if(globalTimerInterval) return;
+  globalTimerInterval = setInterval(()=>{
+    globalTimeLeft = Math.max(0, globalTimeLeft-1);
+    updateTimerDisplay();
+    if(globalTimeLeft<=10 && globalTimeLeft>0) playTick();
+    if(globalTimeLeft===0){ clearInterval(globalTimerInterval); globalTimerInterval=null; playBuzzer(); biuSay('Hết giờ rồi! Các tổ dừng tay nhé!'); }
+  }, 1000);
+});
+document.getElementById('btnTimerPause').addEventListener('click', ()=>{
+  if(globalTimerInterval){ clearInterval(globalTimerInterval); globalTimerInterval=null; }
+});
+document.getElementById('btnTimerReset').addEventListener('click', ()=>{
+  if(globalTimerInterval){ clearInterval(globalTimerInterval); globalTimerInterval=null; }
+  globalTimeLeft = 300;
+  updateTimerDisplay();
+});
+
+/* ========================= MUTE TOGGLE ========================= */
+function setMuteUI(){
+  document.getElementById('btnMute').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('btnMuteSmall').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('mascotFixed').classList.toggle('mute-off', !soundOn);
+}
+document.getElementById('btnMute').addEventListener('click', ()=>{ soundOn = !soundOn; setMuteUI(); if(!soundOn) window.speechSynthesis && window.speechSynthesis.cancel(); });
+document.getElementById('btnMuteSmall').addEventListener('click', ()=>{ soundOn = !soundOn; setMuteUI(); if(!soundOn) window.speechSynthesis && window.speechSynthesis.cancel(); });
+
+/* ========================= EXHIBITION ========================= */
+document.getElementById('btnExhibition').addEventListener('click', openExhibition);
+function openExhibition(){
+  const html = `
+    <div class="text-center text-2xl font-extrabold mb-4">🏆 Triển Lãm Sản Phẩm 4 Tổ</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      ${GROUPS.map(g=>{
+        const gs = state[g.id];
+        const placed = gs.slots.filter(s=>s);
+        return `<div class="cartoon-panel p-3 flex flex-col items-center" style="background:${g.color}22;">
+          <div class="font-extrabold text-lg mb-1">${g.emoji} ${g.label}</div>
+          <div class="flex flex-wrap gap-1 justify-center mb-2" style="min-height:130px;">
+            ${placed.length? placed.map((s,i)=>renderTubeSVG(s, 'exh_'+g.id+'_'+i, {w:52,h:72})).join('') : '<div class="text-xs text-gray-400 py-8">Chưa có sản phẩm</div>'}
+          </div>
+          <div class="font-bold mb-1">⭐ ${gs.stars} sao</div>
+          <button class="btn-cartoon bg-yellow-300 px-3 py-1 text-sm" data-award="${g.id}">🌟 Tặng Sao Khen Thưởng</button>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="flex justify-center mt-4">
+      <button id="btnCloseExhibition" class="btn-cartoon bg-gray-200 px-6 py-2">Đóng</button>
+    </div>`;
+  showModal(html);
+  document.querySelectorAll('[data-award]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const gid = btn.dataset.award;
+      state[gid].stars++;
+      playSparkle();
+      if(window.confetti) confetti({particleCount:40, spread:60, origin:{y:0.3}, scalar:0.7});
+      openExhibition();
+      renderGroupTabs();
+    });
+  });
+  document.getElementById('btnCloseExhibition').addEventListener('click', closeModal);
+}
+
+/* ========================= STATIC BUTTON WIRES ========================= */
+document.getElementById('btnToStep2').addEventListener('click', ()=>switchStep(2));
+document.getElementById('btnToStep1').addEventListener('click', ()=>switchStep(1));
+document.getElementById('btnToStep3').addEventListener('click', ()=>switchStep(3));
+document.getElementById('btnToStep2b').addEventListener('click', ()=>switchStep(2));
+document.getElementById('btnStartMinigame').addEventListener('click', startMinigame);
+
+/* ========================= INIT / START OVERLAY ========================= */
+document.getElementById('btnStartApp').addEventListener('click', ()=>{
+  ensureAudio();
+  if('speechSynthesis' in window){ window.speechSynthesis.getVoices(); }
+  document.getElementById('startOverlay').classList.add('hidden-panel');
+  document.getElementById('app').classList.remove('hidden-panel');
+  document.getElementById('mascotWrap').classList.remove('hidden-panel');
+  document.getElementById('mascotFixed').classList.remove('hidden-panel');
+  document.getElementById('btnMuteSmall').classList.remove('hidden-panel');
+  init();
+});
+
+function init(){
+  renderGroupTabs();
+  renderStepIndicator();
+  updateTimerDisplay();
+  setMuteUI();
+  renderStep1();
+  renderStep2();
+  renderStep3();
+  playSparkle();
+  biuSay('Chào các con! Mình cùng tái chế đồ cũ thành đồ dùng học tập thật xinh nhé!');
+}
+</script>
+</body>
+</html>
