@@ -127,6 +127,9 @@ export default function App() {
     <div className="min-h-screen p-2 md:p-4">
       <header className="cartoon-panel p-2 md:p-3 mb-3 flex items-center gap-3 flex-wrap">
         <div className="text-lg md:text-xl font-extrabold flex-1">🏎️ Đấu Trường Vệ Sĩ Sách Bút &amp; Đua Xe Tái Chế</div>
+        <a href="/" className="btn-cartoon inline-block no-underline bg-orange-200 px-3 py-2 text-sm md:text-base" title="Về trang chủ">
+          🏠 Trang Chủ
+        </a>
         <button onClick={handleChangeMode} className="btn-cartoon bg-orange-200 px-3 py-2 text-sm md:text-base" title="Đổi cách chơi">
           🔁 Đổi Cách Chơi
         </button>
