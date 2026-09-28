@@ -7,6 +7,15 @@ export default function HelpModal({ onClose, speak }) {
         <div className="text-center text-2xl md:text-3xl font-extrabold mb-4">❓ Hướng Dẫn Chơi</div>
 
         <div className="space-y-4">
+          <div className="cartoon-panel p-3" style={{ background: '#ede9fe' }}>
+            <div className="font-extrabold text-lg mb-1">🔀 2 Cách Chơi</div>
+            <ul className="list-disc pl-5 space-y-1 text-sm md:text-base">
+              <li><b>Chơi Theo Tổ:</b> chia lớp thành 4 tổ, mỗi tổ có xe riêng đua về đích.</li>
+              <li><b>Cả Lớp Cùng Chơi:</b> không chia tổ — từng bạn lần lượt lên chơi, điểm dồn chung vào 1 xe của cả lớp. Có thể nhập tên bạn đang chơi để ghi vào nhật ký lượt chơi.</li>
+              <li>Bấm nút "🔁 Đổi Cách Chơi" ở đầu trang bất cứ lúc nào để chọn lại.</li>
+            </ul>
+          </div>
+
           <div className="cartoon-panel p-3" style={{ background: '#fee2e2' }}>
             <div className="font-extrabold text-lg mb-1">🎯 Trò 1: Đập Tan Thói Xấu - Bảo Vệ Đồ Dùng</div>
             <ul className="list-disc pl-5 space-y-1 text-sm md:text-base">

@@ -1,4 +1,7 @@
 export const FINISH_SCORE = 150;
+export const CLASS_FINISH_SCORE = 300;
+
+export const CLASS_TEAM_TEMPLATE = { id: 'class', label: 'Cả Lớp', emoji: '🙋', color: '#93c5fd', accent: '#1d4ed8' };
 
 export const TEAMS_INIT = [
   { id: 'to1', label: 'Tổ 1', emoji: '🌸', color: '#f9a8d4', accent: '#db2777' },
