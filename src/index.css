@@ -5,6 +5,7 @@
   --gold:#ffc93c;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:125%;}
 html,body,#root{height:100%;}
 body{
   margin:0;
