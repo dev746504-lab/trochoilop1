@@ -6,6 +6,7 @@ import Lobby from './components/Lobby.jsx';
 import WhackAMole from './components/WhackAMole.jsx';
 import CatchGame from './components/CatchGame.jsx';
 import Podium from './components/Podium.jsx';
+import HelpModal from './components/HelpModal.jsx';
 
 export default function App() {
   const [started, setStarted] = useState(false);
@@ -14,6 +15,7 @@ export default function App() {
   const [screen, setScreen] = useState('lobby');
   const [catchDuration, setCatchDuration] = useState(30);
   const [boostPulse, setBoostPulse] = useState(null);
+  const [showHelp, setShowHelp] = useState(false);
 
   const { muted, mutedRef, speak, toggleMuted } = useSpeech();
   const sounds = useAudio(mutedRef);
@@ -61,12 +63,21 @@ export default function App() {
       <header className="cartoon-panel p-2 md:p-3 mb-3 flex items-center gap-3 flex-wrap">
         <div className="text-lg md:text-xl font-extrabold flex-1">🏎️ Đấu Trường Vệ Sĩ Sách Bút &amp; Đua Xe Tái Chế</div>
         <button
+          onClick={() => setShowHelp(true)}
+          className="btn-cartoon bg-lime-300 px-3 py-2 text-sm md:text-base"
+          title="Hướng dẫn chơi"
+        >
+          ❓ Hướng Dẫn
+        </button>
+        <button
           onClick={toggleMuted}
           className={`btn-cartoon bg-sky-200 px-3 py-2 text-lg ${muted ? 'mute-off' : ''}`}
         >
           {muted ? '🔇' : '🔊'}
         </button>
       </header>
+
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} speak={speak} />}
 
       <main className="max-w-5xl mx-auto">
         {screen === 'lobby' && (

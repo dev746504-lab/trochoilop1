@@ -114,6 +114,7 @@ body{
     </div>
 
     <button id="btnExhibition" class="btn-cartoon bg-purple-300 text-sm md:text-base px-3 py-2">🏆 Triển Lãm 4 Tổ</button>
+    <button id="btnHelp" class="btn-cartoon bg-lime-300 text-sm md:text-base px-3 py-2" title="Hướng dẫn chơi">❓ Hướng Dẫn</button>
     <button id="btnMute" class="btn-cartoon bg-sky-200 text-sm md:text-base px-3 py-2">🔊</button>
   </header>
 
@@ -1029,6 +1030,60 @@ function setMuteUI(){
 }
 document.getElementById('btnMute').addEventListener('click', ()=>{ soundOn = !soundOn; setMuteUI(); if(!soundOn) window.speechSynthesis && window.speechSynthesis.cancel(); });
 document.getElementById('btnMuteSmall').addEventListener('click', ()=>{ soundOn = !soundOn; setMuteUI(); if(!soundOn) window.speechSynthesis && window.speechSynthesis.cancel(); });
+
+/* ========================= HELP ========================= */
+const HELP_SPEECH_TEXT = 'Hướng dẫn chơi: Bước 1, con chạm vào vật liệu để ghép lên bìa cứng. Bước 2, con chọn màu và sticker để trang trí ống. Bước 3, con chạm vỡ bóng bay để cất đồ dùng học tập vào ống nhé!';
+document.getElementById('btnHelp').addEventListener('click', openHelp);
+function openHelp(){
+  const html = `
+    <div class="text-center text-2xl md:text-3xl font-extrabold mb-4">❓ Hướng Dẫn Chơi</div>
+
+    <div class="space-y-4">
+      <div class="cartoon-panel p-3 bg-amber-50">
+        <div class="font-extrabold text-lg mb-1">🧵 Bước 1: Ghép Đồ Cũ Lên Bìa Cứng</div>
+        <ul class="list-disc pl-5 space-y-1 text-sm md:text-base">
+          <li>Chạm vào vật liệu ở "Kho Vật Liệu" bên trái (lõi giấy, chai nhựa, bìa carton) để ghép lên tấm bìa cứng — tối đa 4 ống.</li>
+          <li>Có thể chạm vào các chấm màu để đổi màu tấm bìa cứng.</li>
+          <li>Ghép ít nhất 1 ống thì mới sang được Bước 2.</li>
+        </ul>
+      </div>
+
+      <div class="cartoon-panel p-3 bg-sky-50">
+        <div class="font-extrabold text-lg mb-1">🎨 Bước 2: Áo Mới Diệu Kỳ</div>
+        <ul class="list-disc pl-5 space-y-1 text-sm md:text-base">
+          <li>Chạm chọn 1 ống, sau đó chọn màu giấy/họa tiết hoặc sticker thú cưng để trang trí.</li>
+          <li>Có thể trang trí nhiều ống khác nhau bằng cách chạm chọn từng ống một.</li>
+        </ul>
+      </div>
+
+      <div class="cartoon-panel p-3 bg-red-50">
+        <div class="font-extrabold text-lg mb-1">🎈 Bước 3: Giải Cứu Đồ Dùng Học Tập</div>
+        <ul class="list-disc pl-5 space-y-1 text-sm md:text-base">
+          <li>Bấm nút "Cất Đồ Dùng Ngay!" để bắt đầu mini-game 15 giây.</li>
+          <li>Chạm vỡ bóng bay để bút, thước rơi gọn gàng vào ống.</li>
+          <li>Cất đủ 8/8 món đồ để nhận huy chương "Chiến Binh Tái Chế Xanh"!</li>
+        </ul>
+      </div>
+
+      <div class="cartoon-panel p-3 bg-purple-50">
+        <div class="font-extrabold text-lg mb-1">👩‍🏫 Dành Cho Giáo Viên</div>
+        <ul class="list-disc pl-5 space-y-1 text-sm md:text-base">
+          <li>Dùng 4 tab 🌸🚀🍀⭐ ở góc trái để chuyển đổi giữa các tổ — mỗi tổ có sản phẩm và điểm riêng.</li>
+          <li>Đồng hồ đếm ngược 5 phút ở góc phải: bấm ▶️ để bắt đầu, ⏸️ để tạm dừng, 🔄 để đặt lại.</li>
+          <li>Bấm "🏆 Triển Lãm 4 Tổ" để xem sản phẩm cả 4 tổ và tặng sao khen thưởng.</li>
+          <li>Bấm 🔊 để bật/tắt giọng nói và âm thanh của bạn Biu.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex gap-3 justify-center mt-5 flex-wrap">
+      <button id="btnHelpSpeak" class="btn-cartoon bg-yellow-300 px-5 py-2">🔊 Nghe Hướng Dẫn</button>
+      <button id="btnCloseHelp" class="btn-cartoon bg-gray-200 px-6 py-2">Đóng</button>
+    </div>`;
+  showModal(html);
+  document.getElementById('btnHelpSpeak').addEventListener('click', () => speak(HELP_SPEECH_TEXT));
+  document.getElementById('btnCloseHelp').addEventListener('click', closeModal);
+}
 
 /* ========================= EXHIBITION ========================= */
 document.getElementById('btnExhibition').addEventListener('click', openExhibition);
