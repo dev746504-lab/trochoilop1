@@ -38,13 +38,8 @@ export default function App() {
 
   const handleChooseMode = (chosenMode) => {
     sounds.ensureAudioUnlocked();
-    if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
     setMode(chosenMode);
     setStarted(true);
-    const msg = chosenMode === 'teams'
-      ? 'Chào mừng các tổ đến với Đấu Trường Vệ Sĩ Sách Bút! Chọn tổ và bắt đầu chơi nào!'
-      : 'Chào mừng cả lớp! Từng bạn hãy lần lượt lên chơi để giúp cả lớp cùng về đích nhé!';
-    setTimeout(() => speak(msg), 150);
   };
 
   const handleChangeMode = () => {
@@ -148,7 +143,7 @@ export default function App() {
         </button>
       </header>
 
-      {showHelp && <HelpModal onClose={() => setShowHelp(false)} speak={speak} />}
+      {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
 
       <main className="max-w-5xl mx-auto">
         {screen === 'lobby' && mode === 'teams' && (

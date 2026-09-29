@@ -1,6 +1,4 @@
-const HELP_SPEECH_TEXT = 'Hướng dẫn chơi: Trò một, Đập Tan Thói Xấu, con chạm thật nhanh vào các nhân vật nhô lên để ghi điểm. Trò hai, Siêu Xe Hứng Đồ Tái Chế, con di chuyển giỏ để hứng đồ tái chế và né đồ bẩn. Ghi điểm để xe của tổ con chạy về đích nhé!';
-
-export default function HelpModal({ onClose, speak }) {
+export default function HelpModal({ onClose }) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" style={{ background: 'rgba(45,42,74,0.55)' }}>
       <div className="cartoon-panel bg-white p-5 md:p-7 max-w-2xl w-full anim-bounceIn" style={{ maxHeight: '90vh', overflowY: 'auto' }}>
@@ -42,15 +40,12 @@ export default function HelpModal({ onClose, speak }) {
               <li>Chọn tổ đang chơi ở màn hình chính trước khi bắt đầu 1 trong 2 trò.</li>
               <li>Điểm ghi được giúp xe tái chế của tổ chạy về đích trên đường đua phía trên.</li>
               <li>Khi có tổ về đích, hoặc giáo viên bấm "🏆 Tổng Kết Trao Cúp", màn hình vinh danh sẽ hiện ra kèm pháo hoa và xếp hạng.</li>
-              <li>Chạm mở 3 rương kho báu để nghe lợi ích của việc giữ gìn đồ dùng học tập.</li>
+              <li>Chạm mở 3 rương kho báu để xem lợi ích của việc giữ gìn đồ dùng học tập.</li>
             </ul>
           </div>
         </div>
 
         <div className="flex gap-3 justify-center mt-5 flex-wrap">
-          <button className="btn-cartoon bg-yellow-300 px-5 py-2" onClick={() => speak(HELP_SPEECH_TEXT)}>
-            🔊 Nghe Hướng Dẫn
-          </button>
           <button className="btn-cartoon bg-gray-200 px-6 py-2" onClick={onClose}>Đóng</button>
         </div>
       </div>
