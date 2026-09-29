@@ -111,6 +111,9 @@ export default function App() {
               <span className="text-xs font-semibold opacity-70">không chia tổ, từng bạn lần lượt lên chơi</span>
             </button>
           </div>
+          <a href="/" className="btn-cartoon inline-block no-underline bg-orange-200 px-5 py-3 mt-4" title="Về trang chủ">
+            🏠 Trang Chủ
+          </a>
         </div>
       </div>
     );
