@@ -137,10 +137,23 @@ body{
           <div class="font-bold text-lg mb-2">🗑️ Kho Vật Liệu</div>
           <div id="materialList" class="flex md:flex-col gap-2 overflow-x-auto scrollbar-thin"></div>
         </div>
-        <div class="flex-1 flex flex-col items-center">
-          <div class="flex gap-2 mb-3 flex-wrap justify-center" id="cardboardColorPicker"></div>
-          <div id="cardboardBoard" class="relative rounded-2xl border-4 border-dashed p-4" style="width:min(92vw,420px);aspect-ratio:16/20;"></div>
-          <div class="mt-3 font-bold text-lg" id="slotCountText"></div>
+        <div class="flex-1 flex flex-col items-center relative">
+          <svg class="absolute inset-0 pointer-events-none" style="opacity:0.3;z-index:0" viewBox="0 0 400 480" preserveAspectRatio="xMidYMid slice">
+            <rect x="16" y="10" width="90" height="90" rx="10" fill="#eaf9ff" stroke="#7dd3fc" stroke-width="4"/>
+            <line x1="61" y1="10" x2="61" y2="100" stroke="#7dd3fc" stroke-width="3"/>
+            <line x1="16" y1="55" x2="106" y2="55" stroke="#7dd3fc" stroke-width="3"/>
+            <circle cx="83" cy="30" r="10" fill="#fde047"/>
+            <path d="M20 45 Q35 35 50 45" stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="round"/>
+            <rect x="300" y="360" width="90" height="100" rx="4" fill="#c68a4e" opacity="0.5"/>
+            <rect x="306" y="368" width="78" height="26" fill="#ef4444" opacity="0.6"/>
+            <rect x="306" y="400" width="78" height="26" fill="#3b82f6" opacity="0.6"/>
+            <rect x="306" y="432" width="78" height="20" fill="#22c55e" opacity="0.6"/>
+          </svg>
+          <div class="relative z-10 flex flex-col items-center w-full">
+            <div class="flex gap-2 mb-3 flex-wrap justify-center" id="cardboardColorPicker"></div>
+            <div id="cardboardBoard" class="relative rounded-2xl border-4 border-dashed p-4" style="width:min(92vw,420px);aspect-ratio:16/20;"></div>
+            <div class="mt-3 font-bold text-lg" id="slotCountText"></div>
+          </div>
         </div>
       </div>
       <div class="flex justify-end mt-3">
@@ -152,8 +165,13 @@ body{
     <section id="step2Panel" class="cartoon-panel p-3 md:p-5 hidden-panel">
       <h2 class="text-xl md:text-2xl font-extrabold text-center mb-3">🎨 Bước 2: Áo Mới Diệu Kỳ</h2>
       <p class="text-center mb-2 font-semibold">👉 Chạm vào 1 ống, rồi chọn màu/họa tiết hoặc sticker thú cưng nhé!</p>
-      <div class="flex justify-center mb-4">
-        <div id="step2Board" class="flex gap-3 flex-wrap justify-center"></div>
+      <div class="flex justify-center mb-4 relative">
+        <svg class="absolute inset-0 pointer-events-none" style="opacity:0.25;z-index:0" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice">
+          <circle cx="40" cy="30" r="16" fill="#fde047"/>
+          <path d="M300 40 Q320 20 340 40 Q360 20 380 40 Q380 55 340 55 Q300 55 300 40 Z" fill="#ffffff"/>
+          <path d="M20 130 Q60 110 100 130 Q140 110 180 130" stroke="#a78bfa" stroke-width="4" fill="none" opacity="0.5"/>
+        </svg>
+        <div id="step2Board" class="relative z-10 flex gap-3 flex-wrap justify-center"></div>
       </div>
       <div class="grid md:grid-cols-2 gap-4">
         <div>
@@ -241,6 +259,8 @@ const MATERIALS = [
   {id:'tube', name:'Lõi giấy vệ sinh', shape:'cylinder', baseColor:'#d9a066'},
   {id:'bottle', name:'Chai nhựa cắt đôi', shape:'cylinder', baseColor:'#a5e8f0'},
   {id:'box', name:'Bìa carton cũ', shape:'box', baseColor:'#c68a4e'},
+  {id:'milk', name:'Hộp sữa giấy', shape:'box', baseColor:'#e0f2fe'},
+  {id:'eggcarton', name:'Vỉ đựng trứng', shape:'cylinder', baseColor:'#f3e8d2'},
 ];
 
 const BOARD_COLORS = ['#fde68a','#bfdbfe','#fecaca','#bbf7d0','#e9d5ff'];
@@ -253,6 +273,9 @@ const COLORS = [
   {id:'rainbow', label:'Cầu vồng', type:'pattern'},
   {id:'dots', label:'Chấm bi', type:'pattern'},
   {id:'stripes', label:'Kẻ sọc', type:'pattern'},
+  {id:'stars', label:'Ngôi sao', type:'pattern'},
+  {id:'hearts', label:'Trái tim', type:'pattern'},
+  {id:'zigzag', label:'Zíc zắc', type:'pattern'},
 ];
 
 const STICKERS = [
@@ -261,6 +284,9 @@ const STICKERS = [
   {id:'rabbit', label:'Thỏ trắng', color:'#ffffff'},
   {id:'panda', label:'Gấu trúc', color:'#f1f5f9'},
   {id:'hero', label:'Siêu nhân', color:'#93c5fd'},
+  {id:'owl', label:'Cú mèo', color:'#d4a373'},
+  {id:'unicorn', label:'Kỳ lân', color:'#fbcfe8'},
+  {id:'tiger', label:'Hổ con', color:'#fdba74'},
 ];
 
 const ITEM_TYPES = {
@@ -269,8 +295,15 @@ const ITEM_TYPES = {
   ruler:   {label:'Thước kẻ', color:'#facc15'},
   crayon:  {label:'Bút màu', color:'#ec4899'},
   scissors:{label:'Kéo', color:'#94a3b8'},
+  eraser:  {label:'Cục tẩy', color:'#f9a8d4'},
+  sharpener:{label:'Gọt bút chì', color:'#5eead4'},
 };
-const ITEM_QUEUE_ORDER = ['pencil','pen','ruler','crayon','scissors','pencil','pen','ruler'];
+const ITEM_QUEUE_BASE = ['pencil','pen','ruler','crayon','scissors','eraser','sharpener'];
+function buildItemQueue(total){
+  const arr = [];
+  for(let i=0;i<total;i++) arr.push(ITEM_QUEUE_BASE[i % ITEM_QUEUE_BASE.length]);
+  return arr;
+}
 
 /* ========================= STATE ========================= */
 function createGroupState(){
@@ -280,7 +313,7 @@ function createGroupState(){
     selectedSlot: null,
     stars: 0,
     minigame: { active:false, done:false, success:false, timeLeft:15, collected:0, total:8,
-      spawnedCount:0, queueRemaining: ITEM_QUEUE_ORDER.slice() }
+      spawnedCount:0, queueRemaining: buildItemQueue(8), speedMultiplier:1 }
   };
 }
 const state = {};
@@ -415,7 +448,23 @@ function iconScissors(size=40){
     <path d="M12 12 L34 32" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"/>
   </svg>`;
 }
-const ITEM_ICON_FN = { pencil:iconPencil, pen:iconPen, ruler:iconRuler, crayon:iconCrayon, scissors:iconScissors };
+function iconEraser(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <g transform="rotate(30 20 20)">
+      <rect x="10" y="12" width="20" height="16" rx="4" fill="#f9a8d4" stroke="#2d2a4a" stroke-width="2"/>
+      <rect x="10" y="12" width="20" height="7" rx="4" fill="#60a5fa" stroke="#2d2a4a" stroke-width="2"/>
+      <line x1="14" y1="24" x2="26" y2="24" stroke="#db2777" stroke-width="1.5" opacity="0.5"/>
+    </g></svg>`;
+}
+function iconSharpener(size=40){
+  return `<svg width="${size}" height="${size}" viewBox="0 0 40 40">
+    <g transform="rotate(15 20 20)">
+      <rect x="8" y="10" width="24" height="20" rx="5" fill="#5eead4" stroke="#2d2a4a" stroke-width="2"/>
+      <circle cx="20" cy="20" r="6" fill="#134e4a" stroke="#2d2a4a" stroke-width="2"/>
+      <circle cx="20" cy="20" r="2.2" fill="#f9d976"/>
+    </g></svg>`;
+}
+const ITEM_ICON_FN = { pencil:iconPencil, pen:iconPen, ruler:iconRuler, crayon:iconCrayon, scissors:iconScissors, eraser:iconEraser, sharpener:iconSharpener };
 
 function iconMaterial(mat){
   if(mat.id==='tube'){
@@ -431,6 +480,23 @@ function iconMaterial(mat){
       <path d="M20 10 h20 v8 l6 8 v34 a4 4 0 0 1 -4 4 H18 a4 4 0 0 1 -4 -4 V26 l6 -8 Z" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3" opacity="0.85"/>
       <rect x="22" y="4" width="16" height="8" rx="2" fill="#60a5fa" stroke="#2d2a4a" stroke-width="3"/>
       <line x1="16" y1="40" x2="44" y2="40" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+    </svg>`;
+  }
+  if(mat.id==='milk'){
+    return `<svg width="60" height="70" viewBox="0 0 60 70">
+      <rect x="12" y="24" width="36" height="42" rx="3" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3"/>
+      <path d="M12 24 L12 12 L30 4 L48 12 L48 24 Z" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="12" y1="24" x2="48" y2="24" stroke="#2d2a4a" stroke-width="2" opacity="0.4"/>
+      <circle cx="30" cy="44" r="8" fill="#ffffff" opacity="0.7"/>
+      <path d="M30 38 L30 50 M25 44 L35 44" stroke="#60a5fa" stroke-width="2"/>
+    </svg>`;
+  }
+  if(mat.id==='eggcarton'){
+    return `<svg width="60" height="70" viewBox="0 0 60 70">
+      <rect x="10" y="30" width="40" height="34" rx="6" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3"/>
+      <path d="M10 30 Q16 18 24 30 Q30 18 36 30 Q42 18 50 30 Z" fill="${mat.baseColor}" stroke="#2d2a4a" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="22" cy="46" r="6" fill="none" stroke="#b08b52" stroke-width="2" opacity="0.6"/>
+      <circle cx="38" cy="46" r="6" fill="none" stroke="#b08b52" stroke-width="2" opacity="0.6"/>
     </svg>`;
   }
   return `<svg width="60" height="70" viewBox="0 0 60 70">
@@ -476,6 +542,24 @@ function getFillFor(colorId, uidSeed){
     return { defs:`<pattern id="${pid}" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
         <rect width="14" height="14" fill="#fca5a5"/>
         <rect width="7" height="14" fill="#ffffff"/>
+      </pattern>`, fill:`url(#${pid})`};
+  }
+  if(colorId==='stars'){
+    return { defs:`<pattern id="${pid}" width="18" height="18" patternUnits="userSpaceOnUse">
+        <rect width="18" height="18" fill="#fde68a"/>
+        <path d="M9 3 L10.5 7 L15 7 L11.5 9.5 L13 14 L9 11 L5 14 L6.5 9.5 L3 7 L7.5 7 Z" fill="#f59e0b"/>
+      </pattern>`, fill:`url(#${pid})`};
+  }
+  if(colorId==='hearts'){
+    return { defs:`<pattern id="${pid}" width="18" height="18" patternUnits="userSpaceOnUse">
+        <rect width="18" height="18" fill="#fbcfe8"/>
+        <path d="M9 14 C4 10 4 6 7 5 C8.5 4.5 9 6 9 6 C9 6 9.5 4.5 11 5 C14 6 14 10 9 14 Z" fill="#ec4899"/>
+      </pattern>`, fill:`url(#${pid})`};
+  }
+  if(colorId==='zigzag'){
+    return { defs:`<pattern id="${pid}" width="16" height="10" patternUnits="userSpaceOnUse">
+        <rect width="16" height="10" fill="#bbf7d0"/>
+        <path d="M0 8 L4 2 L8 8 L12 2 L16 8" fill="none" stroke="#16a34a" stroke-width="2.2"/>
       </pattern>`, fill:`url(#${pid})`};
   }
   return {defs:'', fill:'#f1f5f9'};
@@ -528,6 +612,33 @@ function stickerEarsAndFace(stickerId, uidSeed){
       <circle cx="27" cy="35" r="3.4" fill="#ffffff" ${blink1}/>
       <circle cx="43" cy="35" r="3.4" fill="#ffffff" ${blink2}/>
       <path d="M28 48 Q35 52 42 48" stroke="#2d2a4a" stroke-width="2" fill="none"/>`;
+  }
+  if(stickerId==='owl'){
+    return `<path d="M12 12 Q20 -4 28 12 Q20 8 12 12 Z" fill="#d4a373" stroke="#2d2a4a" stroke-width="2.5"/>
+      <path d="M42 12 Q50 -4 58 12 Q50 8 42 12 Z" fill="#d4a373" stroke="#2d2a4a" stroke-width="2.5"/>
+      <circle cx="27" cy="34" r="7.5" fill="#ffffff" stroke="#2d2a4a" stroke-width="2"/>
+      <circle cx="43" cy="34" r="7.5" fill="#ffffff" stroke="#2d2a4a" stroke-width="2"/>
+      <circle cx="27" cy="34" r="3.4" fill="#2d2a4a" ${blink1}/>
+      <circle cx="43" cy="34" r="3.4" fill="#2d2a4a" ${blink2}/>
+      <path d="M32 40 L35 45 L38 40 Z" fill="#f59e0b" stroke="#2d2a4a" stroke-width="1.5"/>`;
+  }
+  if(stickerId==='unicorn'){
+    return `<path d="M32 -14 L38 12 L26 12 Z" fill="#fde68a" stroke="#2d2a4a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M20 8 L12 -4 L18 10 Z" fill="#ffffff" stroke="#2d2a4a" stroke-width="2.5"/>
+      <path d="M50 8 L58 -4 L52 10 Z" fill="#ffffff" stroke="#2d2a4a" stroke-width="2.5"/>
+      <circle cx="27" cy="34" r="4" fill="#2d2a4a" ${blink1}/>
+      <circle cx="43" cy="34" r="4" fill="#2d2a4a" ${blink2}/>
+      <path d="M14 24 Q22 18 30 22" stroke="#f472b6" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M40 22 Q48 18 56 24" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>`;
+  }
+  if(stickerId==='tiger'){
+    return `<path d="M14 10 L26 -6 L30 12 Z" fill="#fdba74" stroke="#2d2a4a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M56 10 L44 -6 L40 12 Z" fill="#fdba74" stroke="#2d2a4a" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M20 2 L24 8 M50 2 L46 8" stroke="#2d2a4a" stroke-width="2"/>
+      <circle cx="27" cy="34" r="4" fill="#2d2a4a" ${blink1}/>
+      <circle cx="43" cy="34" r="4" fill="#2d2a4a" ${blink2}/>
+      <path d="M20 40 Q35 46 50 40" stroke="#2d2a4a" stroke-width="2" fill="none"/>
+      <path d="M18 30 L10 28 M18 34 L9 34 M52 30 L60 28 M52 34 L61 34" stroke="#2d2a4a" stroke-width="1.5"/>`;
   }
   return '';
 }
@@ -712,6 +823,7 @@ function renderColorPalette(){
       if(!tube) return;
       tube.color = sw.dataset.color;
       playSparkle();
+      if(window.confetti) confetti({particleCount:18, spread:50, scalar:0.5, origin:{y:0.6}});
       renderStep2();
       biuSay('Đẹp quá! Ống của con có áo mới rồi!');
     });
@@ -732,6 +844,7 @@ function renderStickerPalette(){
       if(!tube) return;
       tube.sticker = sw.dataset.sticker;
       playSparkle();
+      if(window.confetti) confetti({particleCount:18, spread:50, scalar:0.5, origin:{y:0.6}});
       renderStep2();
       biuSay('Ôi dễ thương quá, bạn thú cưng mới xuất hiện rồi!');
     });
@@ -797,14 +910,16 @@ function renderMinigameTargets(){
     </div>`).join('');
 }
 
-function startMinigame(){
+function startMinigame(speedMultiplier=1){
   const g = state[currentGroup];
   if(!g.slots.some(s=>s)) { biuSay('Con cần ghép ít nhất 1 ống ở Bước 1 trước nhé!'); return; }
-  g.minigame = { active:true, done:false, success:false, timeLeft:15, collected:0, total:8,
-    spawnedCount:0, queueRemaining: ITEM_QUEUE_ORDER.slice() };
+  const numTubes = g.slots.filter(s=>s).length;
+  const total = Math.min(12, 6 + numTubes*2);
+  g.minigame = { active:true, done:false, success:false, timeLeft:15, collected:0, total,
+    spawnedCount:0, queueRemaining: buildItemQueue(total), speedMultiplier };
   g.slots.forEach(s=>{ if(s) s.peeking = []; });
   renderStep3();
-  biuSay('Bắt đầu! Chạm vỡ bóng bay thật nhanh nào!');
+  biuSay(speedMultiplier>1 ? 'Vòng 2 khó hơn đấy, cố lên nào!' : 'Bắt đầu! Chạm vỡ bóng bay thật nhanh nào!');
 }
 
 function startMinigameLoops(){
@@ -865,9 +980,12 @@ function minigameFrame(ts){
   mgLastTs = ts;
   const arena = document.getElementById('minigameArena');
   const arenaH = arena ? arena.clientHeight : 340;
+  const elapsedFrac = 1 - (g.minigame.timeLeft/15);
+  const ramp = 1 + elapsedFrac*0.6;
+  const effMultiplier = (g.minigame.speedMultiplier||1) * ramp;
   mgBalloons.forEach(b=>{
     const curBottom = parseFloat(b.el.style.bottom) || 0;
-    let newBottom = curBottom + b.speed*dt;
+    let newBottom = curBottom + b.speed*effMultiplier*dt;
     if(newBottom > arenaH + 70){ newBottom = -70; b.baseX = 10+Math.random()*75; }
     b.el.style.bottom = newBottom + 'px';
     const sway = Math.sin(ts/1000*1.2 + b.phase)*6;
@@ -952,7 +1070,13 @@ function endMinigame(success){
   if(success){
     playFanfare();
     if(window.confetti) confetti({particleCount:150, spread:90, origin:{y:0.5}});
-    biuSay('Tuyệt vời! Chiến Binh Tái Chế Xanh xuất sắc!');
+    if(g.minigame.speedMultiplier>1){
+      g.stars++;
+      renderGroupTabs();
+      biuSay('Chinh phục Vòng 2 xuất sắc! Tặng cả nhóm 1 sao thưởng!');
+    } else {
+      biuSay('Tuyệt vời! Chiến Binh Tái Chế Xanh xuất sắc!');
+    }
   } else {
     playBuzzer();
     biuSay('Sắp xong rồi, thử lại lần nữa nhé!');
@@ -963,12 +1087,22 @@ function endMinigame(success){
 function renderMinigameResult(){
   const g = state[currentGroup];
   const wrap = document.getElementById('step3Result');
-  if(g.minigame.success){
+  const wasHardRound = g.minigame.speedMultiplier>1;
+  if(g.minigame.success && wasHardRound){
+    wrap.innerHTML = `
+      <div class="text-6xl mb-2 anim-bounceIn">🌟🏅</div>
+      <div class="text-2xl font-extrabold mb-2">Chinh Phục Vòng 2 Thành Công!</div>
+      <div class="text-lg mb-4">Đã cất gọn ${g.minigame.collected}/${g.minigame.total} món ở tốc độ khó hơn — nhận thêm 1 sao thưởng!</div>
+      <button id="btnReplayMinigame" class="btn-cartoon bg-teal-300 text-lg px-6 py-3">🔁 Chơi Lại Từ Đầu</button>`;
+  } else if(g.minigame.success){
     wrap.innerHTML = `
       <div class="text-6xl mb-2 anim-bounceIn">🏅</div>
       <div class="text-2xl font-extrabold mb-2">Chúc mừng! Huy chương "Chiến Binh Tái Chế Xanh"</div>
       <div class="text-lg mb-4">Đã cất gọn ${g.minigame.collected}/${g.minigame.total} đồ dùng học tập!</div>
-      <button id="btnReplayMinigame" class="btn-cartoon bg-teal-300 text-lg px-6 py-3">🔁 Chơi Lại</button>`;
+      <div class="flex gap-3 justify-center flex-wrap">
+        <button id="btnReplayMinigame" class="btn-cartoon bg-gray-200 text-lg px-6 py-3">🔁 Chơi Lại</button>
+        <button id="btnPlayHarder" class="btn-cartoon bg-red-300 text-lg px-6 py-3 anim-wiggle">🚀 Chơi Vòng 2 (Khó Hơn)</button>
+      </div>`;
   } else {
     wrap.innerHTML = `
       <div class="text-6xl mb-2">💪</div>
@@ -976,11 +1110,14 @@ function renderMinigameResult(){
       <button id="btnReplayMinigame" class="btn-cartoon bg-yellow-300 text-lg px-6 py-3">🔁 Chơi Lại</button>`;
   }
   document.getElementById('btnReplayMinigame').addEventListener('click', ()=>{
-    g.minigame = { active:false, done:false, success:false, timeLeft:15, collected:0, total:8,
-      spawnedCount:0, queueRemaining: ITEM_QUEUE_ORDER.slice() };
+    const total = Math.min(12, 6 + g.slots.filter(s=>s).length*2);
+    g.minigame = { active:false, done:false, success:false, timeLeft:15, collected:0, total,
+      spawnedCount:0, queueRemaining: buildItemQueue(total), speedMultiplier:1 };
     g.slots.forEach(s=>{ if(s) s.peeking = []; });
     renderStep3();
   });
+  const btnHarder = document.getElementById('btnPlayHarder');
+  if(btnHarder) btnHarder.addEventListener('click', ()=>{ startMinigame(1.6); });
 }
 
 /* ========================= GLOBAL 5-MIN TEACHER TIMER ========================= */
