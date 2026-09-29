@@ -34,10 +34,18 @@ export default function HelpModal({ onClose }) {
             </ul>
           </div>
 
+          <div className="cartoon-panel p-3" style={{ background: '#dcfce7' }}>
+            <div className="font-extrabold text-lg mb-1">🗂️ Trò 3: Phân Loại Đồ Dùng</div>
+            <ul className="list-disc pl-5 space-y-1 text-sm md:text-base">
+              <li>Từng món đồ rơi xuống ở giữa màn hình. Chạm bên trái "♻️ Giữ Gìn" nếu đó là đồ nên giữ gìn, chạm bên phải "😖 Thói Xấu" nếu đó là đồ bẩn/hỏng.</li>
+              <li>Phân loại đúng trước khi đồ rơi chạm đáy để +10 điểm; sai thì -5 điểm. Đồ rơi càng nhanh khi về cuối giờ!</li>
+            </ul>
+          </div>
+
           <div className="cartoon-panel p-3" style={{ background: '#fef9c3' }}>
             <div className="font-extrabold text-lg mb-1">🏁 Đường Đua &amp; Trao Cúp</div>
             <ul className="list-disc pl-5 space-y-1 text-sm md:text-base">
-              <li>Chọn tổ đang chơi ở màn hình chính trước khi bắt đầu 1 trong 2 trò.</li>
+              <li>Chọn tổ đang chơi ở màn hình chính trước khi bắt đầu 1 trong 3 trò.</li>
               <li>Điểm ghi được giúp xe tái chế của tổ chạy về đích trên đường đua phía trên.</li>
               <li>Khi có tổ về đích, hoặc giáo viên bấm "🏆 Tổng Kết Trao Cúp", màn hình vinh danh sẽ hiện ra kèm pháo hoa và xếp hạng.</li>
               <li>Chạm mở 3 rương kho báu để xem lợi ích của việc giữ gìn đồ dùng học tập.</li>

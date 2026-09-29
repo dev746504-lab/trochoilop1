@@ -1,12 +1,12 @@
 import RaceTrack from './RaceTrack.jsx';
 
-const GAME_ICON = { whack: '🎯', catch: '🚗' };
+const GAME_ICON = { whack: '🎯', catch: '🚗', sorting: '🗂️' };
 
 export default function ClassLobby({
   classTeam, boostPulse,
   playerName, onPlayerNameChange,
   catchDuration, onSetCatchDuration,
-  onStartWhack, onStartCatch, onOpenCelebration,
+  onStartWhack, onStartCatch, onStartSorting, onOpenCelebration,
   turnLog,
 }) {
   const displayName = playerName.trim() || 'Bạn tình nguyện';
@@ -28,24 +28,34 @@ export default function ClassLobby({
         />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-3 gap-4">
         <button
           onClick={onStartWhack}
-          className="btn-cartoon anim-wiggle text-xl md:text-2xl px-6 py-8 flex flex-col items-center gap-2"
+          className="btn-cartoon anim-wiggle text-lg md:text-xl px-4 py-6 flex flex-col items-center gap-2"
           style={{ background: '#fca5a5' }}
         >
           <span className="text-4xl">🎯</span>
-          Đập Tan Thói Xấu - Bảo Vệ Đồ Dùng
+          Đập Tan Thói Xấu
           <span className="text-sm font-semibold opacity-80">({displayName} đang chơi)</span>
         </button>
 
         <button
           onClick={onStartCatch}
-          className="btn-cartoon anim-wiggle text-xl md:text-2xl px-6 py-8 flex flex-col items-center gap-2"
-          style={{ background: '#93c5fd', animationDelay: '.3s' }}
+          className="btn-cartoon anim-wiggle text-lg md:text-xl px-4 py-6 flex flex-col items-center gap-2"
+          style={{ background: '#93c5fd', animationDelay: '.15s' }}
         >
           <span className="text-4xl">🚗</span>
-          Siêu Xe Hứng Đồ Tái Chế
+          Siêu Xe Hứng Đồ
+          <span className="text-sm font-semibold opacity-80">({displayName} đang chơi)</span>
+        </button>
+
+        <button
+          onClick={onStartSorting}
+          className="btn-cartoon anim-wiggle text-lg md:text-xl px-4 py-6 flex flex-col items-center gap-2"
+          style={{ background: '#86efac', animationDelay: '.3s' }}
+        >
+          <span className="text-4xl">🗂️</span>
+          Phân Loại Đồ Dùng
           <span className="text-sm font-semibold opacity-80">({displayName} đang chơi)</span>
         </button>
       </div>

@@ -6,6 +6,7 @@ import Lobby from './components/Lobby.jsx';
 import ClassLobby from './components/ClassLobby.jsx';
 import WhackAMole from './components/WhackAMole.jsx';
 import CatchGame from './components/CatchGame.jsx';
+import SortingGame from './components/SortingGame.jsx';
 import Podium from './components/Podium.jsx';
 import HelpModal from './components/HelpModal.jsx';
 
@@ -27,7 +28,7 @@ export default function App() {
   const [catchDuration, setCatchDuration] = useState(30);
   const [boostPulse, setBoostPulse] = useState(null);
   const [showHelp, setShowHelp] = useState(false);
-  const [pendingGame, setPendingGame] = useState(null); // 'whack' | 'catch', remembers which game a class-mode turn was
+  const [pendingGame, setPendingGame] = useState(null); // 'whack' | 'catch' | 'sorting', remembers which game a class-mode turn was
 
   const { muted, mutedRef, speak, toggleMuted } = useSpeech();
   const sounds = useAudio(mutedRef);
@@ -54,6 +55,7 @@ export default function App() {
 
   const handleStartWhack = () => { setPendingGame('whack'); setScreen('whack'); };
   const handleStartCatch = () => { setPendingGame('catch'); setScreen('catch'); };
+  const handleStartSorting = () => { setPendingGame('sorting'); setScreen('sorting'); };
 
   const handleRoundEnd = (points) => {
     if (mode === 'teams') {
@@ -158,6 +160,7 @@ export default function App() {
             onSetCatchDuration={setCatchDuration}
             onStartWhack={handleStartWhack}
             onStartCatch={handleStartCatch}
+            onStartSorting={handleStartSorting}
             onOpenPodium={() => setScreen('podium')}
             boostPulse={boostPulse}
           />
@@ -173,6 +176,7 @@ export default function App() {
             onSetCatchDuration={setCatchDuration}
             onStartWhack={handleStartWhack}
             onStartCatch={handleStartCatch}
+            onStartSorting={handleStartSorting}
             onOpenCelebration={() => setScreen('podium')}
             turnLog={turnLog}
           />
@@ -187,6 +191,12 @@ export default function App() {
         {screen === 'catch' && (
           <div className="cartoon-panel p-3 md:p-5">
             <CatchGame team={activeTeam} duration={catchDuration} sounds={sounds} speak={speak} onRoundEnd={handleRoundEnd} />
+          </div>
+        )}
+
+        {screen === 'sorting' && (
+          <div className="cartoon-panel p-3 md:p-5">
+            <SortingGame team={activeTeam} sounds={sounds} speak={speak} onRoundEnd={handleRoundEnd} />
           </div>
         )}
 

@@ -16,6 +16,9 @@ export const BAD_HABITS = [
   { id: 'runRuler', label: 'Cầm thước chạy nhảy, đánh bạn' },
   { id: 'throw', label: 'Vứt sách vở đồ dùng lung tung' },
   { id: 'foldCorner', label: 'Gấp quăn mép sách vở' },
+  { id: 'chewPen', label: 'Cắn, nhai đầu bút' },
+  { id: 'scribbleDesk', label: 'Vẽ bậy lên mặt bàn' },
+  { id: 'dropCase', label: 'Làm rơi hộp bút xuống đất' },
 ];
 
 export const GOOD_HABITS = [
@@ -24,6 +27,9 @@ export const GOOD_HABITS = [
   { id: 'coverBook', label: 'Bọc bìa, dán nhãn vở' },
   { id: 'capPen', label: 'Đậy nắp bút, lau sạch thước' },
   { id: 'shelveBooks', label: 'Cất sách gọn lên giá' },
+  { id: 'useLidBox', label: 'Đựng bút trong hộp có nắp' },
+  { id: 'sortBySize', label: 'Xếp sách vở ngay ngắn theo thứ tự' },
+  { id: 'carryBagProperly', label: 'Đeo cặp sách đúng cách, cẩn thận' },
 ];
 
 export const CATCH_GOOD = [
@@ -33,6 +39,8 @@ export const CATCH_GOOD = [
   { id: 'pencil', label: 'Bút chì gọt vừa' },
   { id: 'pen', label: 'Bút mực đậy nắp' },
   { id: 'book', label: 'Vở bọc bìa' },
+  { id: 'pencilCase', label: 'Hộp đựng bút' },
+  { id: 'label', label: 'Nhãn vở dán tên' },
 ];
 
 export const CATCH_BAD = [
@@ -40,6 +48,8 @@ export const CATCH_BAD = [
   { id: 'paperplane', label: 'Máy bay giấy xé vở' },
   { id: 'brokenpencil', label: 'Bút chì gãy ngòi' },
   { id: 'trash', label: 'Rác bẩn' },
+  { id: 'gum', label: 'Kẹo cao su dính bẩn' },
+  { id: 'clay', label: 'Đất nặn dây bẩn' },
 ];
 
 export const TREASURES = [
@@ -49,3 +59,4 @@ export const TREASURES = [
 ];
 
 export const WHACK_ROUND_SECONDS = 30;
+export const SORTING_ROUND_SECONDS = 30;

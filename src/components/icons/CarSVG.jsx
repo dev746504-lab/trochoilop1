@@ -22,10 +22,18 @@ export default function CarSVG({ color = '#f9a8d4', boosting = false, boostKey =
         <rect x="20" y="52" width="120" height="34" rx="17" fill={color} stroke={INK} strokeWidth="4" />
         <path d="M50 52 L70 24 H108 L124 52 Z" fill={color} stroke={INK} strokeWidth="4" strokeLinejoin="round" />
         <path d="M76 30 L70 50 H108 L104 30 Z" fill="#bae6fd" stroke={INK} strokeWidth="3" strokeLinejoin="round" />
-        <circle cx="50" cy="88" r="16" fill="#3f3f46" stroke={INK} strokeWidth="4" />
-        <circle cx="50" cy="88" r="6" fill="#facc15" stroke={INK} strokeWidth="2" />
-        <circle cx="112" cy="88" r="16" fill="#3f3f46" stroke={INK} strokeWidth="4" />
-        <circle cx="112" cy="88" r="6" fill="#facc15" stroke={INK} strokeWidth="2" />
+        <g className={boosting ? 'wheel-spin' : ''}>
+          <circle cx="50" cy="88" r="16" fill="#3f3f46" stroke={INK} strokeWidth="4" />
+          <circle cx="50" cy="88" r="6" fill="#facc15" stroke={INK} strokeWidth="2" />
+          <line x1="50" y1="76" x2="50" y2="100" stroke="#6b7280" strokeWidth="2" />
+          <line x1="38" y1="88" x2="62" y2="88" stroke="#6b7280" strokeWidth="2" />
+        </g>
+        <g className={boosting ? 'wheel-spin' : ''}>
+          <circle cx="112" cy="88" r="16" fill="#3f3f46" stroke={INK} strokeWidth="4" />
+          <circle cx="112" cy="88" r="6" fill="#facc15" stroke={INK} strokeWidth="2" />
+          <line x1="112" y1="76" x2="112" y2="100" stroke="#6b7280" strokeWidth="2" />
+          <line x1="100" y1="88" x2="124" y2="88" stroke="#6b7280" strokeWidth="2" />
+        </g>
         <rect x="12" y="58" width="16" height="10" rx="4" fill="#e2e8f0" stroke={INK} strokeWidth="3" />
         <circle cx="132" cy="60" r="6" fill="#fde047" stroke={INK} strokeWidth="2.5" />
       </svg>

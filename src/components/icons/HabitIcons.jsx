@@ -124,17 +124,98 @@ function ShelveBooksGood() {
   );
 }
 
+function ChewPenBad() {
+  return (
+    <>
+      <ellipse cx="50" cy="55" rx="36" ry="26" fill="#fecaca" stroke={INK} strokeWidth="3" />
+      <path d="M20 50 Q50 70 80 50" fill="none" stroke={INK} strokeWidth="3" />
+      <path d="M28 50 L34 58 L40 50 L46 58 L52 50 L58 58 L64 50 L70 58 L74 50" fill="#ffffff" stroke={INK} strokeWidth="2" />
+      <g transform="rotate(-20 50 40)">
+        <rect x="44" y="10" width="12" height="34" rx="3" fill="#3b82f6" stroke={INK} strokeWidth="2.5" />
+        <path d="M44 40 L50 50 L56 40 Z" fill="#93c5fd" stroke={INK} strokeWidth="2" />
+        <path d="M46 40 L44 36 L48 38 Z" fill="#ffffff" />
+      </g>
+    </>
+  );
+}
+function ScribbleDeskBad() {
+  return (
+    <>
+      <rect x="10" y="50" width="80" height="30" rx="4" fill="#d4a373" stroke={INK} strokeWidth="3" />
+      <line x1="10" y1="64" x2="90" y2="64" stroke="#8a5a2e" strokeWidth="2" opacity="0.5" />
+      <path d="M20 30 Q30 50 20 55" stroke="#ef4444" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M40 25 Q30 45 45 55" stroke="#3b82f6" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M60 30 Q75 40 65 55" stroke="#22c55e" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <path d="M75 20 Q85 40 78 52" stroke="#f59e0b" strokeWidth="3" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+function DropCaseBad() {
+  return (
+    <>
+      <rect x="32" y="10" width="36" height="16" rx="4" fill="#f59e0b" stroke={INK} strokeWidth="2.5" transform="rotate(-15 50 18)" />
+      <path d="M20 30 L26 24 M30 34 L36 30" stroke={INK} strokeWidth="2" strokeDasharray="2 3" />
+      <g transform="rotate(12 50 65)">
+        <rect x="30" y="52" width="40" height="26" rx="5" fill="#ec4899" stroke={INK} strokeWidth="3" />
+        <line x1="30" y1="65" x2="70" y2="65" stroke="#9d174d" strokeWidth="2" opacity="0.5" />
+      </g>
+      <path d="M20 78 L30 74 M70 82 L80 78 M45 84 L55 82" stroke={INK} strokeWidth="2.5" strokeLinecap="round" />
+    </>
+  );
+}
+function UseLidBoxGood() {
+  return (
+    <>
+      <rect x="16" y="42" width="68" height="34" rx="6" fill="#5eead4" stroke={INK} strokeWidth="3" />
+      <rect x="16" y="42" width="68" height="12" rx="6" fill="#14b8a6" stroke={INK} strokeWidth="2.5" />
+      <circle cx="76" cy="48" r="3" fill="#0f766e" />
+      <circle cx="66" cy="60" r="9" fill="#ffffff" stroke={INK} strokeWidth="2.5" />
+      <path d="M62 60 L65 63 L71 56" stroke="#16a34a" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  );
+}
+function SortBySizeGood() {
+  return (
+    <>
+      <rect x="16" y="66" width="14" height="16" fill="#ef4444" stroke={INK} strokeWidth="2" />
+      <rect x="32" y="56" width="14" height="26" fill="#3b82f6" stroke={INK} strokeWidth="2" />
+      <rect x="48" y="44" width="14" height="38" fill="#22c55e" stroke={INK} strokeWidth="2" />
+      <rect x="64" y="30" width="14" height="52" fill="#f59e0b" stroke={INK} strokeWidth="2" />
+      <line x1="10" y1="82" x2="86" y2="82" stroke={INK} strokeWidth="3" />
+      <path d="M18 22 L24 16 L30 22" stroke="#16a34a" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </>
+  );
+}
+function CarryBagProperlyGood() {
+  return (
+    <>
+      <circle cx="50" cy="24" r="12" fill="#ffd8a8" stroke={INK} strokeWidth="2.5" />
+      <path d="M32 74 L36 46 Q38 36 50 36 Q62 36 64 46 L68 74 Z" fill="#60a5fa" stroke={INK} strokeWidth="3" />
+      <path d="M40 36 Q40 26 50 26 Q60 26 60 36" fill="none" stroke={INK} strokeWidth="3" />
+      <rect x="40" y="50" width="20" height="16" rx="3" fill="#1d4ed8" stroke={INK} strokeWidth="2" />
+      <circle cx="78" cy="20" r="3.5" fill="#f472b6" />
+      <path d="M74 20 Q78 14 82 20 Q78 26 74 20 Z" fill="#f472b6" opacity="0.7" />
+    </>
+  );
+}
+
 const REGISTRY = {
   tear: TearBad,
   ink: InkBad,
   runRuler: RunRulerBad,
   throw: ThrowBad,
   foldCorner: FoldCornerBad,
+  chewPen: ChewPenBad,
+  scribbleDesk: ScribbleDeskBad,
+  dropCase: DropCaseBad,
   cleanBag: CleanBagGood,
   penHolder: PenHolderGood,
   coverBook: CoverBookGood,
   capPen: CapPenGood,
   shelveBooks: ShelveBooksGood,
+  useLidBox: UseLidBoxGood,
+  sortBySize: SortBySizeGood,
+  carryBagProperly: CarryBagProperlyGood,
 };
 
 export default function HabitIcon({ id, size = 64 }) {

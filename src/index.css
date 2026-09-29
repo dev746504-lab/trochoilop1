@@ -81,6 +81,9 @@ body{
 @keyframes carBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
 .car-bob{animation:carBob 1.2s ease-in-out infinite;}
 
+@keyframes wheelSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.wheel-spin{animation:wheelSpin .4s linear infinite;transform-box:fill-box;transform-origin:center;}
+
 @keyframes fallIn{from{transform:translateY(-30px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .anim-fallin{animation:fallIn .25s ease-out both;}
 

@@ -8,9 +8,16 @@ const BAD_TO_GOOD = {
   runRuler: 'capPen',
   throw: 'shelveBooks',
   foldCorner: 'coverBook',
+  chewPen: 'useLidBox',
+  scribbleDesk: 'cleanBag',
+  dropCase: 'carryBagProperly',
 };
 
 const HOLE_COUNT = 6;
+const SPAWN_DELAY_START = 1500;
+const SPAWN_DELAY_END = 900;
+const RETRACT_DELAY_START = 1500;
+const RETRACT_DELAY_END = 1000;
 
 function randomHabit() {
   const isBad = Math.random() < 0.5;
@@ -24,13 +31,17 @@ export default function WhackAMole({ team, sounds, speak, onRoundEnd }) {
   const [countdownText, setCountdownText] = useState('3');
   const [timeLeft, setTimeLeft] = useState(WHACK_ROUND_SECONDS);
   const [score, setScore] = useState(0);
+  const [combo, setCombo] = useState(0);
   const [holes, setHoles] = useState(() => Array.from({ length: HOLE_COUNT }, () => ({ item: null, hitResultId: null })));
 
-  const spawnIntervalRef = useRef(null);
+  const spawnTimeoutRef = useRef(null);
   const tickIntervalRef = useRef(null);
   const retractTimeouts = useRef({});
   const clearTimeouts = useRef({});
   const scoreRef = useRef(0);
+  const timeLeftRef = useRef(WHACK_ROUND_SECONDS);
+
+  useEffect(() => { timeLeftRef.current = timeLeft; }, [timeLeft]);
 
   useEffect(() => {
     let step = 3;
@@ -56,7 +67,10 @@ export default function WhackAMole({ team, sounds, speak, onRoundEnd }) {
     if (phase !== 'playing') return undefined;
     speak('Chạm nhanh để đập tan thói xấu và khen thưởng thiên thần giữ gìn nhé!');
 
-    spawnIntervalRef.current = setInterval(() => {
+    const scheduleSpawn = () => {
+      const elapsedFrac = 1 - (timeLeftRef.current / WHACK_ROUND_SECONDS);
+      const retractDelay = RETRACT_DELAY_START - elapsedFrac * (RETRACT_DELAY_START - RETRACT_DELAY_END);
+
       setHoles((prev) => {
         const emptyIdx = prev.map((h, i) => (h.item ? -1 : i)).filter((i) => i >= 0);
         if (emptyIdx.length === 0) return prev;
@@ -72,11 +86,16 @@ export default function WhackAMole({ team, sounds, speak, onRoundEnd }) {
               if (copy[idx].item === habit) copy[idx] = { item: null, hitResultId: null };
               return copy;
             });
-          }, 1500);
+            setCombo(0);
+          }, retractDelay);
         });
         return next;
       });
-    }, 1500);
+
+      const nextDelay = SPAWN_DELAY_START - elapsedFrac * (SPAWN_DELAY_START - SPAWN_DELAY_END);
+      spawnTimeoutRef.current = setTimeout(scheduleSpawn, nextDelay);
+    };
+    spawnTimeoutRef.current = setTimeout(scheduleSpawn, SPAWN_DELAY_START);
 
     tickIntervalRef.current = setInterval(() => {
       setTimeLeft((t) => {
@@ -89,7 +108,7 @@ export default function WhackAMole({ team, sounds, speak, onRoundEnd }) {
     }, 1000);
 
     return () => {
-      clearInterval(spawnIntervalRef.current);
+      clearTimeout(spawnTimeoutRef.current);
       clearInterval(tickIntervalRef.current);
       Object.values(retractTimeouts.current).forEach(clearTimeout);
       Object.values(clearTimeouts.current).forEach(clearTimeout);
@@ -117,6 +136,7 @@ export default function WhackAMole({ team, sounds, speak, onRoundEnd }) {
       const resultId = kind === 'bad' ? BAD_TO_GOOD[itemId] : itemId;
       scoreRef.current += 10;
       setScore(scoreRef.current);
+      setCombo((c) => c + 1);
       if (kind === 'bad') sounds.pop(); else sounds.chime();
 
       const next = prev.slice();
@@ -158,6 +178,9 @@ export default function WhackAMole({ team, sounds, speak, onRoundEnd }) {
     <div>
       <div className="flex items-center justify-between mb-3 px-2">
         <div className={`text-2xl font-extrabold ${timeLeft <= 5 ? 'timer-danger' : ''}`}>⏱️ {timeLeft}</div>
+        {combo >= 3 && (
+          <div key={combo} className="text-lg font-extrabold text-orange-500 anim-pop">🔥 Combo x{combo}!</div>
+        )}
         <div className="text-xl font-extrabold">⭐ {score} điểm</div>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 p-2">

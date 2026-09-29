@@ -5,8 +5,8 @@ import { CATCH_GOOD, CATCH_BAD } from '../data/gameData.js';
 const CATCH_BAND_FROM_BOTTOM = 96;
 const CATCH_HALF_WIDTH_PCT = 9;
 
-function randomCatchItem() {
-  const isGood = Math.random() < 0.62;
+function randomCatchItem(goodProb) {
+  const isGood = Math.random() < goodProb;
   const pool = isGood ? CATCH_GOOD : CATCH_BAD;
   const pick = pool[Math.floor(Math.random() * pool.length)];
   return { kind: isGood ? 'good' : 'bad', itemId: pick.id };
@@ -30,8 +30,10 @@ export default function CatchGame({ team, duration, sounds, speak, onRoundEnd })
   const spawnIntervalRef = useRef(null);
   const tickIntervalRef = useRef(null);
   const holdIntervalRef = useRef(null);
+  const timeLeftRef = useRef(duration);
 
   useEffect(() => { basketXRef.current = basketX; }, [basketX]);
+  useEffect(() => { timeLeftRef.current = timeLeft; }, [timeLeft]);
 
   useEffect(() => {
     let step = 3;
@@ -58,12 +60,16 @@ export default function CatchGame({ team, duration, sounds, speak, onRoundEnd })
     speak('Hứng đồ dùng cần thiết, né đồ bẩn nhé!');
 
     spawnIntervalRef.current = setInterval(() => {
-      const item = randomCatchItem();
+      const elapsedFrac = 1 - (timeLeftRef.current / duration);
+      const goodProb = 0.62 - elapsedFrac * 0.12;
+      const speedMin = 90 + elapsedFrac * 50;
+      const speedMax = 180 + elapsedFrac * 80;
+      const item = randomCatchItem(goodProb);
       setItems((prev) => [...prev, {
         id: itemIdRef.current++,
         x: 8 + Math.random() * 84,
         y: -60,
-        speed: 90 + Math.random() * 90,
+        speed: speedMin + Math.random() * (speedMax - speedMin),
         kind: item.kind,
         itemId: item.itemId,
       }]);
@@ -122,7 +128,7 @@ export default function CatchGame({ team, duration, sounds, speak, onRoundEnd })
       clearInterval(tickIntervalRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [phase, sounds, speak]);
+  }, [phase, sounds, speak, duration]);
 
   useEffect(() => {
     if (phase === 'playing' && timeLeft === 0) {
@@ -194,7 +200,14 @@ export default function CatchGame({ team, duration, sounds, speak, onRoundEnd })
           onPointerMove={(e) => { if (e.buttons === 1 || e.pressure > 0) moveBasketToClientX(e.clientX); }}
         >
           {items.map((it) => (
-            <div key={it.id} className="absolute anim-fallin" style={{ left: `${it.x}%`, top: it.y, transform: 'translateX(-50%)' }}>
+            <div
+              key={it.id}
+              className="absolute anim-fallin"
+              style={{
+                left: `${it.x}%`, top: it.y, transform: 'translateX(-50%)',
+                filter: it.kind === 'good' ? 'drop-shadow(0 -10px 8px rgba(34,197,94,0.5))' : 'drop-shadow(0 -10px 8px rgba(239,68,68,0.5))',
+              }}
+            >
               <ItemIcon id={it.itemId} size={54} />
             </div>
           ))}

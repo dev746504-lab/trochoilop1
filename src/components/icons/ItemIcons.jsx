@@ -99,6 +99,44 @@ function TrashBad() {
   );
 }
 
+function PencilCaseGood() {
+  return (
+    <>
+      <rect x="14" y="34" width="72" height="34" rx="14" fill="#a78bfa" stroke={INK} strokeWidth="3" />
+      <path d="M14 44 Q50 30 86 44" fill="none" stroke={INK} strokeWidth="3" />
+      <circle cx="70" cy="51" r="4" fill="#fde047" stroke={INK} strokeWidth="1.5" />
+    </>
+  );
+}
+function LabelGood() {
+  return (
+    <>
+      <rect x="18" y="24" width="64" height="46" rx="6" fill="#fef08a" stroke={INK} strokeWidth="3" />
+      <circle cx="50" cy="30" r="3" fill={INK} />
+      <line x1="28" y1="42" x2="72" y2="42" stroke="#a16207" strokeWidth="2.5" />
+      <line x1="28" y1="54" x2="60" y2="54" stroke="#a16207" strokeWidth="2.5" />
+    </>
+  );
+}
+function GumBad() {
+  return (
+    <>
+      <ellipse cx="50" cy="55" rx="28" ry="22" fill="#f472b6" stroke={INK} strokeWidth="2.5" />
+      <path d="M50 33 Q60 15 70 28 Q66 36 58 36" fill="#f9a8d4" stroke={INK} strokeWidth="2.5" />
+      <circle cx="40" cy="50" r="6" fill="#fbcfe8" opacity="0.8" />
+    </>
+  );
+}
+function ClayBad() {
+  return (
+    <>
+      <path d="M30 60 Q20 40 38 32 Q50 22 62 32 Q80 40 70 60 Q65 74 50 74 Q35 74 30 60 Z" fill="#fb923c" stroke={INK} strokeWidth="2.5" />
+      <circle cx="42" cy="46" r="5" fill="#fdba74" />
+      <circle cx="58" cy="52" r="4" fill="#fdba74" />
+    </>
+  );
+}
+
 const REGISTRY = {
   tube: TubeGood,
   bottle: BottleGood,
@@ -110,6 +148,10 @@ const REGISTRY = {
   paperplane: PaperplaneBad,
   brokenpencil: BrokenpencilBad,
   trash: TrashBad,
+  pencilCase: PencilCaseGood,
+  label: LabelGood,
+  gum: GumBad,
+  clay: ClayBad,
 };
 
 export default function ItemIcon({ id, size = 56 }) {
